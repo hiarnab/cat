@@ -50,6 +50,9 @@
         <label>Student Name</label>
         <input type="text" name="name" required>
 
+         <label>Student Name</label>
+        <input type="text" name="name" required>
+
         <!-- Address -->
         <label>Address</label>
         <textarea name="address" rows="3" required></textarea>

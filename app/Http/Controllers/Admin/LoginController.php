@@ -22,18 +22,20 @@ class LoginController extends Controller
         $request->validate([
         'name' => 'required',
         'email' => 'required',
-        'password' => 'required'
+        // 'password' => 'required'
         ]);
 
         $data = $request->all();
 
-        User::create([
+       $users =  User::create([
             'name'=> $data['name'],
             'email'=> $data['email'],
-            'password'=> Hash::make($data['password'])
+            'password'=> Hash::make('123456'),
+            'role_id' => 2
         ]);
 
         StudentDetails::create([
+            'user_id' => $users->id,
             'name' => $data['name'],
             'address' => $data['address'],
             'current_class' => $data['current_class'],
