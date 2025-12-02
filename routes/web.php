@@ -26,6 +26,7 @@ Route::get('admin/dashboard',[DashboardController::class,'index'])->name('admin.
 
 });
 
+
 Route::get('cat-eaxm',function(){
     return view('student.cat-exam');
 });
@@ -36,6 +37,10 @@ Route::get('career-test',function(){
 
 Route::get('admin/login',[LoginController::class,'login_view'])->name('login.view');
 Route::post('login',[LoginController::class,'loggedin'])->name('login.submit');
-
 Route::post('logout',[LoginController::class,'logout'])->name('logout');
 // admin
+
+// student
+Route::get('student/register',[LoginController::class,'register_view'])->name('register');
+Route::post('student/register/submit',[LoginController::class,'register'])->name('register.submit');
+// student
