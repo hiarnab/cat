@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Assessment Test - Yes, You Can!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .logo-text .tagline {
+            font-size: 14px;
+            opacity: 0.9;
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .test-info {
+            text-align: right;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+        }
+
+        .test-info h2 {
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .timer {
+            background: var(--accent);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .progress-container {
+            background: var(--light);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .main-content {
+            padding: 30px;
+            display: flex;
+            gap: 30px;
+        }
+
+        .form-section {
+            flex: 2;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--secondary);
+            display: none;
+        }
+
+        .section-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: var(--primary);
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--secondary);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            border: 1px solid #e9ecef;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: var(--secondary);
+            background: #f0f8ff;
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 30px;
+        }
+
+        .option-text {
+            flex-grow: 1;
+            color: #333;
+        }
+
+        .option.selected {
+            border-color: var(--success);
+            background: #e8f6f0;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #1a252f;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219653;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .sidebar {
+            flex: 1;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .info-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-info {
+            display: grid;
+            gap: 10px;
+        }
+
+        .student-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .student-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .section-navigation {
+            list-style: none;
+        }
+
+        .section-nav-item {
+            padding: 12px 15px;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+
+        .section-nav-item:hover {
+            background: #f0f8ff;
+            border-left-color: var(--secondary);
+        }
+
+        .section-nav-item.active {
+            background: #e8f4fc;
+            border-left-color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .section-nav-item.completed {
+            color: var(--success);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            padding: 25px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .modal-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 24px;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .marksheet {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: inset 0 0 0 2px var(--primary);
+        }
+
+        .marksheet-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .marksheet-header h2 {
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .student-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--border-radius);
+        }
+
+        .detail-item label {
+            display: block;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .detail-item span {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .score-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .score-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .score-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .score-max {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #e8f4fc 0%, #f0f8ff 100%);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin: 30px 0;
+            border-left: 5px solid var(--success);
+        }
+
+        .recommendation h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stream-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+        }
+
+        .stream-card.recommended {
+            border-color: var(--success);
+            background: #f0f9f4;
+        }
+
+        .stream-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stream-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .test-info {
+                text-align: center;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .main-content, .header {
+                padding: 20px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="logo-container">
+                <!-- Logo will be inserted here -->
+                <div class="logo-placeholder" style="background: #3498db; color: white; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 24px;">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>CAREER & COURSES</h1>
+                    <div class="tagline">Yes, You Can!</div>
+                </div>
+            </div>
+            
+            <div class="test-info">
+                <h2>Career Assessment Test</h2>
+                <div class="date-time">
+                    <div id="current-date">Date: Loading...</div>
+                    <div id="current-time">Time: Loading...</div>
+                </div>
+                <div class="timer" id="timer">30:00</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <span id="progress-text">Section 1 of 8</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <span id="question-counter">Question 1 of 32</span>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Form Sections -->
+            <div class="form-section">
+                <!-- Personal Details Section -->
+                <div class="section-card active" id="section-0">
+                    <h2 class="section-title"><i class="fas fa-user"></i> Student Information</h2>
+                    
+                    <div class="student-details-form">
+                        <div class="question">
+                            <div class="question-text">Full Name</div>
+                            <input type="text" id="student-name" class="form-input" placeholder="Enter your full name" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                        </div>
+                        
+                        <div class="question">
+                            <div class="question-text">School Name</div>
+                            <input type="text" id="school-name" class="form-input" placeholder="Enter your school name" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                        </div>
+                        
+                        <div class="question">
+                            <div class="question-text">Email Address (for report)</div>
+                            <input type="email" id="student-email" class="form-input" placeholder="Enter your email address" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
+                        </div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button class="btn btn-primary" onclick="startTest()">
+                            <i class="fas fa-play-circle"></i> Start Test
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question Sections will be dynamically inserted here -->
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> Test Information</h3>
+                    <div class="student-info">
+                        <div class="student-info-item">
+                            <span>Test Name:</span>
+                            <span id="sidebar-test-name">Career Assessment Test</span>
+                        </div>
+                        <div class="student-info-item">
+                            <span>Student:</span>
+                            <span id="sidebar-student-name">-</span>
+                        </div>
+                        <div class="student-info-item">
+                            <span>School:</span>
+                            <span id="sidebar-school-name">-</span>
+                        </div>
+                        <div class="student-info-item">
+                            <span>Time Left:</span>
+                            <span id="sidebar-time">30:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-list"></i> Sections</h3>
+                    <ul class="section-navigation" id="section-nav">
+                        <!-- Sections will be dynamically inserted -->
+                    </ul>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <h3>Generating your career assessment report...</h3>
+        <p>Please wait while we process your results</p>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal" id="results-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-chart-line"></i> Career Assessment Report</h2>
+            </div>
+            <div class="modal-body">
+                <div class="marksheet">
+                    <div class="marksheet-header">
+                        <h2>Career Stream Assessment Report</h2>
+                        <p>Based on your performance and interests</p>
+                    </div>
+                    
+                    <div class="student-details">
+                        <div class="detail-item">
+                            <label>Student Name</label>
+                            <span id="report-name">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>School Name</label>
+                            <span id="report-school">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Test Date</label>
+                            <span id="report-date">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Test Time</label>
+                            <span id="report-time">-</span>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">Subject-wise Scores</h3>
+                    <div class="scores-grid" id="scores-grid">
+                        <!-- Scores will be dynamically inserted -->
+                    </div>
+                    
+                    <div class="recommendation">
+                        <h3><i class="fas fa-bullseye"></i> Stream Recommendation</h3>
+                        <div id="stream-recommendation">
+                            <!-- Recommendation will be dynamically inserted -->
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">Career Guidance</h3>
+                    <div id="career-guidance">
+                        <!-- Guidance will be dynamically inserted -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeResults()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+                <button class="btn btn-success" onclick="sendEmailReport()">
+                    <i class="fas fa-envelope"></i> Email Report
+                </button>
+                <button class="btn btn-primary" onclick="printReport()">
+                    <i class="fas fa-print"></i> Print Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test questions data
+        const testQuestions = [
+            // Section 1: Mathematics Aptitude (Q1-Q5)
+            { section: "Mathematics Aptitude", text: "How do you feel about solving mathematical problems?", options: [
+                "I enjoy them and find them challenging in a good way",
+                "I can solve them but don't particularly enjoy them",
+                "I find them difficult and avoid them when possible",
+                "I dislike them and get stressed"
+            ]},
+            { section: "Mathematics Aptitude", text: "When you see algebraic equations, what is your reaction?", options: [
+                "I find them interesting and like solving them",
+                "I can solve them with some effort",
+                "I find them confusing",
+                "I don't understand them at all"
+            ]},
+            { section: "Mathematics Aptitude", text: "How comfortable are you with geometry and shapes?", options: [
+                "Very comfortable - I can visualize shapes easily",
+                "Somewhat comfortable - I can manage with practice",
+                "Uncomfortable - I find spatial reasoning difficult",
+                "Very uncomfortable - I struggle with geometry"
+            ]},
+            { section: "Mathematics Aptitude", text: "When working with graphs and charts, do you:", options: [
+                "Easily understand and interpret what they show",
+                "Understand them after studying them carefully",
+                "Find them confusing",
+                "Avoid tasks involving graphs and charts"
+            ]},
+            { section: "Mathematics Aptitude", text: "How do you approach logical reasoning problems?", options: [
+                "I enjoy them and find them engaging",
+                "I can solve them with some effort",
+                "I find them tedious",
+                "I avoid them as much as possible"
+            ]},
+            
+            // Section 2: Physics Interest (Q6-Q8)
+            { section: "Physics Interest", text: "When you see machines or gadgets, are you curious about how they work?", options: [
+                "Very curious - I often try to understand their mechanism",
+                "Somewhat curious - I might wonder briefly",
+                "Not very curious - I just use them",
+                "Not at all curious"
+            ]},
+            { section: "Physics Interest", text: "How interested are you in topics like force, motion, and energy?", options: [
+                "Very interested",
+                "Somewhat interested",
+                "Slightly interested",
+                "Not interested"
+            ]},
+            { section: "Physics Interest", text: "Do you enjoy physics laboratory experiments?", options: [
+                "I love them and look forward to them",
+                "I find them okay",
+                "I'm not very interested",
+                "I dislike them"
+            ]},
+            
+            // Section 3: Chemistry Interest (Q9-Q10)
+            { section: "Chemistry Interest", text: "How do you feel about chemical reactions and equations?", options: [
+                "Fascinating - I enjoy learning about them",
+                "Interesting sometimes",
+                "Not very interesting",
+                "Boring and difficult"
+            ]},
+            { section: "Chemistry Interest", text: "When in chemistry lab, are you:", options: [
+                "Very careful and methodical with procedures",
+                "Reasonably careful",
+                "Sometimes careless",
+                "Uncomfortable with lab work"
+            ]},
+            
+            // Section 4: Biology Interest (Q11-Q13)
+            { section: "Biology Interest", text: "How interested are you in learning about the human body and health?", options: [
+                "Very interested",
+                "Somewhat interested",
+                "Slightly interested",
+                "Not interested"
+            ]},
+            { section: "Biology Interest", text: "When studying plants and animals, do you:", options: [
+                "Find it fascinating and want to learn more",
+                "Find it somewhat interesting",
+                "Study it because you have to",
+                "Find it boring"
+            ]},
+            { section: "Biology Interest", text: "How comfortable are you with biological diagrams and processes?", options: [
+                "Very comfortable - I can understand them easily",
+                "Somewhat comfortable",
+                "Uncomfortable",
+                "Very uncomfortable"
+            ]},
+            
+            // Section 5: Languages Aptitude (Q14-Q16)
+            { section: "Languages Aptitude", text: "How do you feel about reading stories and literature?", options: [
+                "I love reading and often read for pleasure",
+                "I enjoy reading sometimes",
+                "I read only when required",
+                "I dislike reading"
+            ]},
+            { section: "Languages Aptitude", text: "When writing essays or compositions, do you:", options: [
+                "Enjoy expressing my thoughts creatively",
+                "Find it okay, but it takes effort",
+                "Find it difficult to express ideas",
+                "Strongly dislike writing tasks"
+            ]},
+            { section: "Languages Aptitude", text: "How is your vocabulary and grammar skills?", options: [
+                "Excellent - I enjoy learning new words",
+                "Good - I manage well",
+                "Average - I sometimes struggle",
+                "Poor - I find language rules difficult"
+            ]},
+            
+            // Section 6: Commerce Aptitude (Q17-Q19) and Social Sciences (Q20-Q22)
+            { section: "Commerce Aptitude", text: "How good are you at managing money or budgets?", options: [
+                "Very good - I naturally plan and organize",
+                "Reasonably good",
+                "Not very good",
+                "Poor - I don't enjoy financial planning"
+            ]},
+            { section: "Commerce Aptitude", text: "Are you interested in business and economic concepts?", options: [
+                "Very interested",
+                "Somewhat interested",
+                "Slightly interested",
+                "Not interested"
+            ]},
+            { section: "Commerce Aptitude", text: "How organized are you with numbers and records?", options: [
+                "Very organized - I like keeping things systematic",
+                "Somewhat organized",
+                "Not very organized",
+                "Disorganized - I dislike record keeping"
+            ]},
+            { section: "Social Sciences Aptitude", text: "How interested are you in historical events and dates?", options: [
+                "Very interested - I find history fascinating",
+                "Somewhat interested",
+                "Slightly interested",
+                "Not interested - I find it boring"
+            ]},
+            { section: "Social Sciences Aptitude", text: "When studying geography and maps, do you:", options: [
+                "Enjoy learning about different places and cultures",
+                "Find it somewhat interesting",
+                "Study it because you have to",
+                "Find it uninteresting"
+            ]},
+            { section: "Social Sciences Aptitude", text: "How do you feel about discussing social and political issues?", options: [
+                "I enjoy discussions and have strong opinions",
+                "I sometimes participate in discussions",
+                "I rarely participate",
+                "I avoid such discussions"
+            ]},
+            
+            // Section 7: Career Interests (Q23-Q25)
+            { section: "Career Interests", text: "Which type of work environment do you prefer?", options: [
+                "Laboratory or research setting",
+                "Office with structured work",
+                "Creative and flexible environment",
+                "Field work with variety"
+            ]},
+            { section: "Career Interests", text: "What is most important to you in a career?", options: [
+                "High salary",
+                "Job satisfaction",
+                "Helping society",
+                "Creativity and innovation"
+            ]},
+            { section: "Career Interests", text: "How do you learn best?", options: [
+                "Through practical experiments and hands-on work",
+                "By reading and making notes",
+                "Through discussions and group study",
+                "By solving problems and practicing"
+            ]},
+            
+            // Section 8: Learning Style (Q26-Q28)
+            { section: "Learning Style", text: "When faced with a difficult problem, do you:", options: [
+                "Enjoy the challenge and persist until solved",
+                "Try to solve it but may give up if too hard",
+                "Ask for help immediately",
+                "Avoid difficult problems"
+            ]},
+            { section: "Learning Style", text: "What describes your study style best?", options: [
+                "Regular and systematic",
+                "Last-minute but effective",
+                "Need pressure to study",
+                "Enjoy learning new concepts"
+            ]},
+            { section: "Learning Style", text: "How do you handle complex information?", options: [
+                "Break it down into smaller parts",
+                "Try to understand it as a whole",
+                "Look for patterns and connections",
+                "Seek help from others"
+            ]}
+        ];
+
+        // Test state variables
+        let currentSection = 0;
+        let currentQuestion = 0;
+        let answers = Array(testQuestions.length).fill(null);
+        let testStarted = false;
+        let timeLeft = 30 * 60; // 30 minutes in seconds
+        let timerInterval = null;
+        const studentInfo = {
+            name: "",
+            school: "",
+            email: "",
+            testDate: "",
+            testTime: ""
+        };
+
+        // Section mapping for scoring
+        const sectionMapping = {
+            "Mathematics Aptitude": { start: 0, end: 4, maxScore: 20 },
+            "Physics Interest": { start: 5, end: 7, maxScore: 12 },
+            "Chemistry Interest": { start: 8, end: 9, maxScore: 8 },
+            "Biology Interest": { start: 10, end: 12, maxScore: 12 },
+            "Languages Aptitude": { start: 13, end: 15, maxScore: 12 },
+            "Commerce Aptitude": { start: 16, end: 18, maxScore: 12 },
+            "Social Sciences Aptitude": { start: 19, end: 21, maxScore: 12 },
+            "Career Interests": { start: 22, end: 24, maxScore: 12 },
+            "Learning Style": { start: 25, end: 27, maxScore: 12 }
+        };
+
+        // Initialize the test
+        function init() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            generateSectionNavigation();
+            generateQuestionSections();
+        }
+
+        // Update current date and time for Kolkata, India
+        function updateDateTime() {
+            const now = new Date();
+            const options = { timeZone: 'Asia/Kolkata', hour12: false };
+            const dateStr = now.toLocaleDateString('en-IN', { ...options, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-IN', options);
+            
+            document.getElementById('current-date').textContent = `Date: ${dateStr}`;
+            document.getElementById('current-time').textContent = `Time: ${timeStr}`;
+            
+            // Store for report
+            studentInfo.testDate = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
+            studentInfo.testTime = timeStr;
+        }
+
+        // Generate section navigation
+        function generateSectionNavigation() {
+            const sections = [
+                "Student Information",
+                "Mathematics Aptitude",
+                "Science Aptitude",
+                "Languages Aptitude",
+                "Commerce & Social Sciences",
+                "Career Interests",
+                "Learning Style"
+            ];
+            
+            const navContainer = document.getElementById('section-nav');
+            navContainer.innerHTML = '';
+            
+            sections.forEach((section, index) => {
+                const li = document.createElement('li');
+                li.className = 'section-nav-item';
+                if (index === 0) li.classList.add('active');
+                li.textContent = `${index + 1}. ${section}`;
+                li.onclick = () => navigateToSection(index);
+                li.id = `nav-section-${index}`;
+                navContainer.appendChild(li);
+            });
+        }
+
+        // Generate question sections
+        function generateQuestionSections() {
+            const formSection = document.querySelector('.form-section');
+            
+            // Create sections based on question groups
+            const sections = [
+                { title: "Mathematics Aptitude", icon: "fas fa-calculator", questions: [0, 1, 2, 3, 4] },
+                { title: "Science Aptitude", icon: "fas fa-flask", questions: [5, 6, 7, 8, 9, 10, 11, 12] },
+                { title: "Languages Aptitude", icon: "fas fa-book", questions: [13, 14, 15] },
+                { title: "Commerce & Social Sciences", icon: "fas fa-chart-line", questions: [16, 17, 18, 19, 20, 21] },
+                { title: "Career Interests", icon: "fas fa-briefcase", questions: [22, 23, 24] },
+                { title: "Learning Style", icon: "fas fa-brain", questions: [25, 26, 27] }
+            ];
+            
+            sections.forEach((section, sectionIndex) => {
+                const sectionCard = document.createElement('div');
+                sectionCard.className = 'section-card';
+                sectionCard.id = `question-section-${sectionIndex + 1}`;
+                
+                let html = `<h2 class="section-title"><i class="${section.icon}"></i> ${section.title}</h2>`;
+                
+                section.questions.forEach((qIndex, qNum) => {
+                    const question = testQuestions[qIndex];
+                    html += `
+                        <div class="question" id="question-${qIndex}">
+                            <div class="question-text">${qNum + 1}. ${question.text}</div>
+                            <div class="options">
+                    `;
+                    
+                    question.options.forEach((option, optIndex) => {
+                        const letter = String.fromCharCode(65 + optIndex);
+                        html += `
+                            <div class="option" onclick="selectAnswer(${qIndex}, ${optIndex})">
+                                <input type="radio" name="q${qIndex}" id="q${qIndex}_${optIndex}">
+                                <span class="option-label">${letter}</span>
+                                <span class="option-text">${option}</span>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div></div>`;
+                });
+                
+                html += `
+                    <div class="navigation">
+                        ${sectionIndex > 0 ? `<button class="btn btn-secondary" onclick="prevSection()"><i class="fas fa-arrow-left"></i> Previous</button>` : `<div></div>`}
+                        ${sectionIndex < sections.length - 1 ? `<button class="btn btn-primary" onclick="nextSection()">Next <i class="fas fa-arrow-right"></i></button>` : `<button class="btn btn-success" onclick="submitTest()"><i class="fas fa-check-circle"></i> Submit Test</button>`}
+                    </div>
+                `;
+                
+                sectionCard.innerHTML = html;
+                formSection.appendChild(sectionCard);
+            });
+        }
+
+        // Start the test
+        function startTest() {
+            studentInfo.name = document.getElementById('student-name').value.trim();
+            studentInfo.school = document.getElementById('school-name').value.trim();
+            studentInfo.email = document.getElementById('student-email').value.trim();
+            
+            if (!studentInfo.name || !studentInfo.school || !studentInfo.email) {
+                alert('Please fill in all the required fields.');
+                return;
+            }
+            
+            if (!isValidEmail(studentInfo.email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            // Update sidebar
+            document.getElementById('sidebar-student-name').textContent = studentInfo.name;
+            document.getElementById('sidebar-school-name').textContent = studentInfo.school;
+            
+            // Hide personal details section
+            document.getElementById('section-0').classList.remove('active');
+            
+            // Show first question section
+            document.getElementById('question-section-1').classList.add('active');
+            
+            // Update navigation
+            updateNavigation(1);
+            
+            // Start timer
+            startTimer();
+            
+            testStarted = true;
+        }
+
+        // Validate email
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Start the countdown timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                document.getElementById('timer').textContent = timeString;
+                document.getElementById('sidebar-time').textContent = timeString;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+                
+                // Change color when less than 5 minutes
+                if (timeLeft < 300) {
+                    document.getElementById('timer').style.background = '#e74c3c';
+                }
+            }, 1000);
+        }
+
+        // Select answer
+        function selectAnswer(questionIndex, optionIndex) {
+            answers[questionIndex] = optionIndex;
+            
+            // Update UI
+            const questionDiv = document.getElementById(`question-${questionIndex}`);
+            questionDiv.querySelectorAll('.option').forEach((opt, idx) => {
+                opt.classList.toggle('selected', idx === optionIndex);
+                opt.querySelector('input').checked = idx === optionIndex;
+            });
+            
+            // Update navigation if all questions in section are answered
+            updateSectionCompletion();
+        }
+
+        // Navigate to section
+        function navigateToSection(sectionIndex) {
+            if (sectionIndex === 0 && testStarted) return; // Can't go back to personal details
+            
+            // Hide all sections
+            document.querySelectorAll('.section-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Show selected section
+            if (sectionIndex === 0) {
+                document.getElementById('section-0').classList.add('active');
+            } else {
+                document.getElementById(`question-section-${sectionIndex}`).classList.add('active');
+            }
+            
+            // Update navigation
+            updateNavigation(sectionIndex);
+        }
+
+        // Update navigation and progress
+        function updateNavigation(sectionIndex) {
+            // Update progress text
+            const sectionTitles = [
+                "Student Information",
+                "Mathematics Aptitude",
+                "Science Aptitude",
+                "Languages Aptitude",
+                "Commerce & Social Sciences",
+                "Career Interests",
+                "Learning Style"
+            ];
+            document.getElementById('progress-text').textContent = sectionTitles[sectionIndex];
+            
+            // Update progress bar
+            const progress = (sectionIndex / (sectionTitles.length - 1)) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            
+            // Update section navigation
+            document.querySelectorAll('.section-nav-item').forEach((item, idx) => {
+                item.classList.toggle('active', idx === sectionIndex);
+                if (idx > 0 && idx <= sectionIndex) {
+                    item.classList.add('completed');
+                } else {
+                    item.classList.remove('completed');
+                }
+            });
+            
+            // Update question counter
+            let totalQuestions = 0;
+            let currentQuestionNum = 1;
+            
+            if (sectionIndex > 0) {
+                for (let i = 1; i < sectionIndex; i++) {
+                    totalQuestions += document.getElementById(`question-section-${i}`).querySelectorAll('.question').length;
+                }
+                currentQuestionNum = totalQuestions + 1;
+            }
+            
+            document.getElementById('question-counter').textContent = 
+                `Question ${currentQuestionNum} of ${testQuestions.length}`;
+        }
+
+        // Next section
+        function nextSection() {
+            const current = parseInt(document.querySelector('.section-card.active').id.split('-').pop());
+            if (current < 6) { // 6 question sections
+                navigateToSection(current + 1);
+            }
+        }
+
+        // Previous section
+        function prevSection() {
+            const current = parseInt(document.querySelector('.section-card.active').id.split('-').pop());
+            if (current > 1) {
+                navigateToSection(current - 1);
+            }
+        }
+
+        // Update section completion status
+        function updateSectionCompletion() {
+            const activeSection = document.querySelector('.section-card.active');
+            if (!activeSection || !activeSection.id.startsWith('question-section-')) return;
+            
+            const sectionNum = parseInt(activeSection.id.split('-').pop());
+            let allAnswered = true;
+            
+            // Check if all questions in this section are answered
+            const questions = activeSection.querySelectorAll('.question');
+            questions.forEach(q => {
+                const questionId = parseInt(q.id.split('-').pop());
+                if (answers[questionId] === null) {
+                    allAnswered = false;
+                }
+            });
+            
+            // Update next button
+            const nextBtn = activeSection.querySelector('.navigation .btn-primary');
+            if (nextBtn) {
+                nextBtn.disabled = !allAnswered;
+            }
+        }
+
+        // Calculate scores
+        function calculateScores() {
+            const scores = {
+                mathematics: 0,
+                physics: 0,
+                chemistry: 0,
+                biology: 0,
+                languages: 0,
+                commerce: 0,
+                socialSciences: 0,
+                careerInterests: 0,
+                learningStyle: 0,
+                total: 0
+            };
+            
+            // Calculate scores for each answer (A=4, B=3, C=2, D=1)
+            answers.forEach((answer, index) => {
+                if (answer !== null) {
+                    const points = 4 - answer; // A=4, B=3, C=2, D=1
+                    
+                    // Map to categories
+                    if (index >= 0 && index <= 4) scores.mathematics += points;
+                    else if (index >= 5 && index <= 7) scores.physics += points;
+                    else if (index >= 8 && index <= 9) scores.chemistry += points;
+                    else if (index >= 10 && index <= 12) scores.biology += points;
+                    else if (index >= 13 && index <= 15) scores.languages += points;
+                    else if (index >= 16 && index <= 18) scores.commerce += points;
+                    else if (index >= 19 && index <= 21) scores.socialSciences += points;
+                    else if (index >= 22 && index <= 24) scores.careerInterests += points;
+                    else if (index >= 25 && index <= 27) scores.learningStyle += points;
+                    
+                    scores.total += points;
+                }
+            });
+            
+            return scores;
+        }
+
+        // Determine stream recommendation
+        function getStreamRecommendation(scores) {
+            const recommendations = [];
+            
+            // Science Stream (PCM)
+            if (scores.mathematics >= 16 && (scores.physics + scores.chemistry) >= 15) {
+                const interestScore = answers[22] !== null ? (4 - answers[22]) : 0; // Work environment preference
+                if (interestScore >= 3) {
+                    recommendations.push({
+                        stream: "Science Stream (PCM)",
+                        description: "Physics, Chemistry, Mathematics with Computer Science",
+                        reason: "Strong mathematical aptitude and interest in scientific principles",
+                        careers: ["Engineering", "Architecture", "Pure Sciences", "Research", "Technology"],
+                        recommended: true
+                    });
+                }
+            }
+            
+            // Science Stream (PCB)
+            if (scores.biology >= 9 && scores.chemistry >= 6) {
+                const interestScore = answers[23] !== null ? (4 - answers[23]) : 0; // Career priority
+                if (interestScore <= 1) { // Job satisfaction or helping society
+                    recommendations.push({
+                        stream: "Science Stream (PCB)",
+                        description: "Physics, Chemistry, Biology with Mathematics/Computer Science",
+                        reason: "Strong interest in life sciences and healthcare",
+                        careers: ["Medical Doctor", "Dentist", "Pharmacist", "Biotechnologist", "Medical Research"],
+                        recommended: true
+                    });
+                }
+            }
+            
+            // Commerce Stream
+            if (scores.mathematics >= 12 && scores.commerce >= 9) {
+                const interestScore = answers[23] !== null ? (4 - answers[23]) : 0; // Career priority
+                if (interestScore >= 2) { // High salary or business
+                    recommendations.push({
+                        stream: "Commerce Stream",
+                        description: "Accountancy, Business Studies, Economics with Mathematics",
+                        reason: "Aptitude for numbers, business concepts, and financial planning",
+                        careers: ["Chartered Accountant", "Business Management", "Finance", "Entrepreneurship", "Banking"],
+                        recommended: true
+                    });
+                }
+            }
+            
+            // Humanities/Arts Stream
+            if ((scores.languages + scores.socialSciences) >= 18) {
+                recommendations.push({
+                    stream: "Humanities/Arts Stream",
+                    description: "History, Political Science, Geography, Psychology, Literature",
+                    reason: "Strong language skills and interest in social sciences",
+                    careers: ["Law", "Journalism", "Teaching", "Civil Services", "Psychology", "Social Work"],
+                    recommended: true
+                });
+            }
+            
+            // If no specific recommendation, suggest based on highest scores
+            if (recommendations.length === 0) {
+                const maxScore = Math.max(
+                    scores.mathematics,
+                    scores.physics + scores.chemistry,
+                    scores.biology + scores.chemistry,
+                    scores.commerce,
+                    scores.languages + scores.socialSciences
+                );
+                
+                if (maxScore === scores.mathematics || maxScore === scores.physics + scores.chemistry) {
+                    recommendations.push({
+                        stream: "Science Stream (PCM/PCB)",
+                        description: "Based on your balanced aptitude",
+                        reason: "Good overall performance in science and mathematics",
+                        careers: ["Explore both engineering and medical options"],
+                        recommended: false
+                    });
+                } else if (maxScore === scores.commerce) {
+                    recommendations.push({
+                        stream: "Commerce Stream",
+                        description: "Accountancy, Business Studies, Economics",
+                        reason: "Good aptitude for commerce subjects",
+                        careers: ["Business", "Finance", "Management"],
+                        recommended: false
+                    });
+                } else {
+                    recommendations.push({
+                        stream: "Humanities/Arts Stream",
+                        description: "History, Political Science, Geography, Psychology",
+                        reason: "Good aptitude for languages and social sciences",
+                        careers: ["Law", "Journalism", "Civil Services"],
+                        recommended: false
+                    });
+                }
+            }
+            
+            return recommendations;
+        }
+
+        // Submit test
+        function submitTest() {
+            // Check if all questions are answered
+            const unanswered = answers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                if (!confirm(`You have ${unanswered} unanswered questions. Are you sure you want to submit?`)) {
+                    return;
+                }
+            }
+            
+            // Stop timer
+            clearInterval(timerInterval);
+            
+            // Calculate scores
+            const scores = calculateScores();
+            const recommendations = getStreamRecommendation(scores);
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            
+            // Generate report after delay
+            setTimeout(() => {
+                showResults(scores, recommendations);
+                document.getElementById('loading').classList.remove('active');
+            }, 2000);
+        }
+
+        // Show results
+        function showResults(scores, recommendations) {
+            // Update report details
+            document.getElementById('report-name').textContent = studentInfo.name;
+            document.getElementById('report-school').textContent = studentInfo.school;
+            document.getElementById('report-date').textContent = studentInfo.testDate;
+            document.getElementById('report-time').textContent = studentInfo.testTime;
+            
+            // Update scores grid
+            const scoresGrid = document.getElementById('scores-grid');
+            scoresGrid.innerHTML = '';
+            
+            const scoreCards = [
+                { title: "Mathematics", score: scores.mathematics, max: 20, color: "#3498db" },
+                { title: "Physics", score: scores.physics, max: 12, color: "#e74c3c" },
+                { title: "Chemistry", score: scores.chemistry, max: 8, color: "#9b59b6" },
+                { title: "Biology", score: scores.biology, max: 12, color: "#2ecc71" },
+                { title: "Languages", score: scores.languages, max: 12, color: "#f39c12" },
+                { title: "Commerce", score: scores.commerce, max: 12, color: "#1abc9c" },
+                { title: "Social Sciences", score: scores.socialSciences, max: 12, color: "#34495e" },
+                { title: "Total Score", score: scores.total, max: 116, color: "#2c3e50" }
+            ];
+            
+            scoreCards.forEach(card => {
+                const scoreCard = document.createElement('div');
+                scoreCard.className = 'score-card';
+                scoreCard.style.borderTopColor = card.color;
+                scoreCard.innerHTML = `
+                    <h4>${card.title}</h4>
+                    <div class="score-value">${card.score}</div>
+                    <div class="score-max">out of ${card.max}</div>
+                `;
+                scoresGrid.appendChild(scoreCard);
+            });
+            
+            // Update stream recommendations
+            const streamRec = document.getElementById('stream-recommendation');
+            streamRec.innerHTML = '';
+            
+            recommendations.forEach((rec, index) => {
+                const streamCard = document.createElement('div');
+                streamCard.className = `stream-card ${rec.recommended ? 'recommended' : ''}`;
+                streamCard.innerHTML = `
+                    <h4><i class="fas fa-${rec.recommended ? 'check-circle' : 'info-circle'}"></i> ${rec.stream}</h4>
+                    <p><strong>Description:</strong> ${rec.description}</p>
+                    <p><strong>Reason:</strong> ${rec.reason}</p>
+                    <p><strong>Potential Careers:</strong> ${rec.careers.join(', ')}</p>
+                    ${rec.recommended ? '<p class="recommended-tag" style="color: #27ae60; font-weight: 600; margin-top: 10px;"><i class="fas fa-star"></i> RECOMMENDED</p>' : ''}
+                `;
+                streamRec.appendChild(streamCard);
+            });
+            
+            // Add career guidance
+            const guidance = document.getElementById('career-guidance');
+            guidance.innerHTML = `
+                <div class="stream-card">
+                    <h4><i class="fas fa-graduation-cap"></i> Next Steps</h4>
+                    <p>1. Discuss these results with your parents and career counselor</p>
+                    <p>2. Research the recommended streams and career options</p>
+                    <p>3. Talk to professionals working in fields that interest you</p>
+                    <p>4. Consider taking aptitude tests for specific career paths</p>
+                    <p>5. Remember: Your interests and passions matter most!</p>
+                </div>
+                <div class="stream-card" style="margin-top: 15px;">
+                    <h4><i class="fas fa-envelope"></i> Report Delivery</h4>
+                    <p>A detailed report has been sent to your email: <strong>${studentInfo.email}</strong></p>
+                    <p>You will also receive a day-wise Excel report at our career counseling center.</p>
+                </div>
+            `;
+            
+            // Show modal
+            document.getElementById('results-modal').classList.add('active');
+            
+            // Send email report
+            sendEmailReportToServer(scores, recommendations);
+        }
+
+        // Close results
+        function closeResults() {
+            document.getElementById('results-modal').classList.remove('active');
+        }
+
+        // Print report
+        function printReport() {
+            const modalContent = document.querySelector('.modal-content').cloneNode(true);
+            const printWindow = window.open('', '_blank');
+            
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Career Assessment Report - ${studentInfo.name}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .marksheet { border: 2px solid #000; padding: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .scores-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+                        .score-card { border: 1px solid #ccc; padding: 10px; text-align: center; }
+                        .recommendation { background: #f0f8ff; padding: 15px; margin: 20px 0; }
+                        @media print {
+                            button { display: none !important; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${modalContent.innerHTML}
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
+        }
+
+        // Send email report
+        function sendEmailReport() {
+            alert('Report sent to your email and career counseling center!');
+            closeResults();
+        }
+
+        // Simulate sending email to server
+        function sendEmailReportToServer(scores, recommendations) {
+            // In a real implementation, this would send data to a backend server
+            // For now, we'll simulate by logging to console
+            console.log('Sending email report to:', studentInfo.email);
+            console.log('Sending Excel report to: careercourseswestbengal@gmail.com');
+            
+            // Prepare data for Excel
+            const reportData = {
+                studentName: studentInfo.name,
+                school: studentInfo.school,
+                email: studentInfo.email,
+                testDate: studentInfo.testDate,
+                testTime: studentInfo.testTime,
+                scores: scores,
+                recommendations: recommendations.map(r => r.stream),
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('Report data:', reportData);
+            
+            // In production, you would use:
+            // fetch('/api/send-report', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(reportData)
+            // });
+        }
+
+        // Initialize when page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
