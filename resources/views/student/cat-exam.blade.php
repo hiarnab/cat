@@ -485,5 +485,28 @@
             }
         }, 1000);
     </script>
+    <script>
+document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('limit-checkbox')) {
+
+        let group = e.target.closest('.checkbox-group');
+        let max = parseInt(group.dataset.max);
+        let checked = group.querySelectorAll('.limit-checkbox:checked');
+        let errorMsg = group.querySelector('.error-msg');
+
+        if (checked.length > max) {
+            e.target.checked = false;
+
+            // Show error message near label
+            errorMsg.style.display = "block";
+        } else {
+            // Hide error when valid
+            errorMsg.style.display = "none";
+        }
+    }
+});
+</script>
+
+
 
 @endsection

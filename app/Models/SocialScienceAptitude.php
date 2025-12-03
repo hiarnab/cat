@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class SocialScienceAptitude extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'section_id',
+        'question_20',
+        'question_21',
+        'question_22',
+    ];
+}
