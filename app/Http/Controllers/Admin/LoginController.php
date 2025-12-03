@@ -20,17 +20,17 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-        'name' => 'required',
-        'email' => 'required',
-        // 'password' => 'required'
+            'name' => 'required',
+            'email' => 'required',
+            // 'password' => 'required'
         ]);
 
         $data = $request->all();
 
-       $users =  User::create([
-            'name'=> $data['name'],
-            'email'=> $data['email'],
-            'password'=> Hash::make('123456'),
+        $users =  User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make('123456'),
             'role_id' => 2
         ]);
 
@@ -42,9 +42,9 @@ class LoginController extends Controller
             'school_name' => $data['school_name'],
             'future_stream' => $data['future_stream'],
             'mobile' => $data['mobile'],
-            'guardian_mobile'=> $data['guardian_mobile'],
-            'guardian_whatsapp'=> $data['guardian_whatsapp']
-        ]); 
+            'guardian_mobile' => $data['guardian_mobile'],
+            'guardian_whatsapp' => $data['guardian_whatsapp']
+        ]);
 
         return Redirect()->back();
     }
@@ -57,16 +57,22 @@ class LoginController extends Controller
     public function loggedin(Request $request)
     {
         $request->validate([
-            'email'=> 'required',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
-        $credentials = $request->only('email','password');
+        $credentials = $request->only('email', 'password');
 
-        if(Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully');
+
+            $user = Auth::user();
+
+            if ($user->role_id === 1) {
+                return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully');
+            } elseif ($user->role_id === 2) {
+                return redirect()->route('start.test')->with('success', 'Logged in Successfully');
+            }
         } else {
             return redirect()->back();
         }
