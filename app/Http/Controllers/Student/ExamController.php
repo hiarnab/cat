@@ -160,7 +160,7 @@ class ExamController extends Controller
                                             $selfReflection->question_32 = $request->q32;
                                             $selfReflection->save();
                                             if($selfReflection->save()){
-                                                return redirect()->back();
+                                               return redirect()->back()->with('success', 'Your test has been submitted successfully!');
                                             }
                                         }
                                     }

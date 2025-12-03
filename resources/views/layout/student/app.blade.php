@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,8 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* prevent horizontal scroll */
+            overflow-x: hidden;
+            /* prevent horizontal scroll */
         }
 
         .main-wrapper {
@@ -39,6 +41,7 @@
 
     <div class="main-wrapper">
 
+
         {{-- SIDEBAR --}}
         @include('layout.student.partials.sidebar')
 
@@ -51,8 +54,32 @@
 
     {{-- FOOTER --}}
     @include('layout.student.partials.footer')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <form id="autoLogoutForm" action="{{ route('logout') }}" method="POST" style="display:none;">
+            @csrf
+        </form>
+
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Submitted!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3085d6',
+            }).then(() => {
+                // Logout immediately when OK is clicked
+                document.getElementById('autoLogoutForm').submit();
+            });
+
+            // Also auto-logout after 3 seconds if user does nothing
+            setTimeout(() => {
+                document.getElementById('autoLogoutForm').submit();
+            }, 3000);
+        </script>
+    @endif
 
     {{-- Extra page JS --}}
     @stack('scripts')
 </body>
+
 </html>
