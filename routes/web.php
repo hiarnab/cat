@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Student\ExamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,27 +21,28 @@ Route::get('/', function () {
 });
 
 // admin
-Route::middleware('admin')->group(function(){
+Route::middleware('admin')->group(function () {
 
-Route::get('admin/dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
+    Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+});
 
+Route::get('admin/login', [LoginController::class, 'login_view'])->name('login.view');
+Route::post('login', [LoginController::class, 'loggedin'])->name('login.submit');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+// admin
+
+
+// student
+Route::get('student/register', [LoginController::class, 'register_view'])->name('register');
+Route::post('student/register/submit', [LoginController::class, 'register'])->name('register.submit');
+
+Route::middleware('student')->group(function () {
+    Route::get('start-test', [ExamController::class, 'start_test'])->name('start.test');
+    Route::get('career-test',[ExamController::class,'career_test'])->name('career.test');
 });
 
 
-Route::get('cat-eaxm',function(){
+Route::get('cat-eaxm', function () {
     return view('student.cat-exam');
 });
-Route::get('career-test',function(){
-    return view('student.start-test');
-});
-
-
-Route::get('admin/login',[LoginController::class,'login_view'])->name('login.view');
-Route::post('login',[LoginController::class,'loggedin'])->name('login.submit');
-Route::post('logout',[LoginController::class,'logout'])->name('logout');
-// admin
- 
-// student
-Route::get('student/register',[LoginController::class,'register_view'])->name('register');
-Route::post('student/register/submit',[LoginController::class,'register'])->name('register.submit');
-// student
+// student   
