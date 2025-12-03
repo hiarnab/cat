@@ -18,21 +18,21 @@ $name = "q".$index;
 @endif
 
 
-@if($type == "checkbox")
+@if($type == "multi")
     <div class="checkbox-group" data-max="3">
-        @foreach($item['items'] as $val)
+        @foreach($item['options'] as $val)
             <div class="option">
                 <label>
-                    <input type="checkbox" 
-                           name="{{ $name }}[]" 
-                           value="{{ $val }}" 
-                           class="limit-checkbox">
+                    <input 
+                        type="checkbox" 
+                        name="{{ $name }}[]" 
+                        value="{{ $val }}" 
+                        class="limit-checkbox">
                     {{ $val }}
                 </label>
             </div>
         @endforeach
-
-        {{-- Error message shown here --}}
+    
         <p class="error-msg" style="color:red; font-size:13px; display:none;">
             You can select only 3 options.
         </p>

@@ -11,4 +11,13 @@ class Sections extends Model
     protected $fillable = [
         'name',
     ];
+    public function questions()
+    {
+        return $this->hasMany(Question::class, 'section_id');
+    }
+
+    public function subSections()
+    {
+        return $this->hasMany(SubSection::class, 'section_id');
+    }
 }

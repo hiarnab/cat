@@ -39,10 +39,11 @@ Route::post('student/register/submit', [LoginController::class, 'register'])->na
 Route::middleware('student')->group(function () {
     Route::get('start-test', [ExamController::class, 'start_test'])->name('start.test');
     Route::get('career-test',[ExamController::class,'career_test'])->name('career.test');
+    Route::post('career-test/submit',[ExamController::class,'career_test_submit'])->name('career.test.submit');
 });
 
 
-Route::get('cat-eaxm', function () {
-    return view('student.cat-exam');
-});
+// Route::get('cat-eaxm', function () {
+//     return view('student.cat-exam');
+// });
 // student   
