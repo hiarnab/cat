@@ -65,7 +65,7 @@
 
 <div class="box">
     <h2>Career Assessment Test</h2>
-
+        
     <p class="demo-text">
         👉 Demo Student Information (View Only)
         <br>
@@ -74,39 +74,40 @@
 
     <div class="row">
         <span>Student Name:</span>
-        <span>Demo Student Name</span>
+        <span>{{$student_details->name}}</span>
+        <input type="hidden" value="{{ $student_details->id }}">
     </div>
 
     <div class="row">
         <span>Current Class Studying:</span>
-        <span>10th Class</span>
+        <span>{{$student_details->current_class}}</span>
     </div>
 
     <div class="row">
         <span>School Name:</span>
-        <span>Demo Public School</span>
+        <span>{{$student_details->school_name}}</span>
     </div>
 
     <div class="row">
         <span>Mobile Number:</span>
-        <span>9876543210</span>
+        <span>{{$student_details->mobile}}</span>
     </div>
 
     <div class="row">
         <span>Guardian Mobile Number:</span>
-        <span>9876543211</span>
+        <span>{{$student_details->guardian_mobile}}</span>
     </div>
 
     <div class="row">
         <span>Guardian WhatsApp Number:</span>
-        <span>9876543211</span>
+        <span>{{$student_details->guardian_whatsapp}}</span>
     </div>
 
     <div class="row">
         <span>Email ID:</span>
-        <span>demo@student.com</span>
+        <span>{{$student_details->user->email}}</span>
     </div>
-
+  
     <a href="{{ url('/career-test') }}">
         <button class="start-btn">
             ✅ Start Test
