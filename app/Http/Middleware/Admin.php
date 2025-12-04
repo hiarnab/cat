@@ -16,7 +16,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->email === 1) {
+        if (auth()->check() && auth()->user()->role_id === 1) {
             return $next($request);
         } else {
             return Redirect()->route('login.view');

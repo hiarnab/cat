@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+
+use App\Models\StudentDetails;
 use App\Models\MathematicsAptitude;
 use App\Models\PhysicsInterest;
 use App\Models\ChemistryInterest;
@@ -13,6 +15,7 @@ use App\Models\SocialScienceAptitude;
 use App\Models\CareerInterests;
 use App\Models\LearningStyle;
 use App\Models\SelfReflection;
+
 use Illuminate\Http\Request;
 use App\Models\Sections;
 
@@ -21,7 +24,11 @@ class ExamController extends Controller
 {
     public function start_test()
     {
-        return view('student.start-test');
+        $auth_id = auth()->user()->id;
+        $student_details = StudentDetails::with('user')->where('user_id',$auth_id )->first();
+
+        // $regi
+        return view('student.start-test',compact('student_details'));
     }
     public function career_test()
     {
