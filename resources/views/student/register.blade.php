@@ -18,8 +18,16 @@
 
     <style>
         @import url('https://rsms.me/inter/inter.css');
+
         :root {
             --tblr-font-sans-serif: 'Inter Var', sans-serif;
+        }
+
+        /* ✅ 80% Screen Width Card */
+        .custom-card-width {
+            width: 60vw;
+            max-width: 1100px;
+            margin: auto;
         }
     </style>
 </head>
@@ -28,7 +36,7 @@
     <script src="{{ asset('assets/js/demo-theme.min.js') }}"></script>
 
     <div class="page page-center">
-        <div class="container container-tight py-4">
+        <div class="container py-4">
 
             <!-- Logo -->
             <div class="text-center mb-4">
@@ -37,7 +45,8 @@
                 </a>
             </div>
 
-            <div class="card card-md">
+            <!-- ✅ 80% Width Card -->
+            <div class="card custom-card-width">
                 <div class="card-body">
                     <h2 class="h2 text-center mb-4">Student Registration Form</h2>
 
@@ -86,7 +95,8 @@
                             <!-- Guardian Mobile -->
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Guardian Mobile Number</label>
-                                <input type="text" name="guardian_mobile" maxlength="10" class="form-control" required>
+                                <input type="text" name="guardian_mobile" maxlength="10" class="form-control"
+                                    required>
                             </div>
 
                             <!-- Guardian WhatsApp -->
@@ -101,7 +111,7 @@
                                 <input type="email" name="email" class="form-control">
                             </div>
 
-                            <!-- Address (Full Width) -->
+                            <!-- Address -->
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Address</label>
                                 <textarea name="address" rows="3" class="form-control" required></textarea>
@@ -116,7 +126,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -125,4 +134,5 @@
     <script src="{{ asset('assets/js/demo.min.js') }}" defer></script>
 
 </body>
+
 </html>
