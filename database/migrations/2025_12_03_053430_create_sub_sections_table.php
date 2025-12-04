@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-         $table->unsignedBigInteger('role_id')->nullable()->after('id');
-         $table->foreign('role_id')->references('id')->on('roles');
+        Schema::create('sub_sections', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('section_id')->nullable();
+            $table->string('name');
+            $table->foreign('section_id')->references('id')->on('sections');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('sub_sections');
     }
 };
