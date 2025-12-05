@@ -3,32 +3,41 @@ $type = $item['type'];
 $name = $index;
 @endphp
 
+{{-- ✅ MCQ TYPE --}}
 @if($type == "mcq")
-    @foreach($item['options'] as $key => $val)
+    @foreach($item['options'] as $key => $opt)
         @php
-            $optionValue = chr(97 + $key); // a, b, c, d...
+            $optionLabel = chr(97 + $key); // a, b, c, d...
         @endphp
+
         <div class="option">
             <label>
-                <input type="radio" name="{{ $name }}" value="{{ $optionValue }}">
-                {{ $optionValue }}) {{ $val }}
+                <input 
+                    type="radio" 
+                    name="{{ $name }}" 
+                    value="{{ $opt['id'] }}"  {{-- ✅ SEND ID --}}
+                 
+                >
+                {{ $optionLabel }}) {{ $opt['value'] }}
             </label>
         </div>
     @endforeach
 @endif
 
 
+{{-- ✅ MULTI SELECT TYPE --}}
 @if($type == "multi")
     <div class="checkbox-group" data-max="3">
-        @foreach($item['options'] as $val)
+        @foreach($item['options'] as $opt)
             <div class="option">
                 <label>
                     <input 
                         type="checkbox" 
                         name="{{ $name }}[]" 
-                        value="{{ $val }}" 
-                        class="limit-checkbox">
-                    {{ $val }}
+                        value="{{ $opt['id'] }}"  {{-- ✅ SEND ID --}}
+                        class="limit-checkbox"
+                    >
+                    {{ $opt['value'] }}
                 </label>
             </div>
         @endforeach
@@ -40,11 +49,16 @@ $name = $index;
 @endif
 
 
-
+{{-- ✅ SINGLE TEXTAREA --}}
 @if($type == "textarea")
-    <textarea name="{{ $name }}" style="width:100%; height:70px; margin-top:6px;"></textarea>
+    <textarea 
+        name="{{ $name }}" 
+        style="width:100%; height:70px; margin-top:6px;"
+    ></textarea>
 @endif
 
+
+{{-- ✅ THREE TEXT INPUTS --}}
 @if($type == "textarea3")
     <input type="text" name="{{ $name }}[]" style="width:100%; margin-bottom:10px;">
     <input type="text" name="{{ $name }}[]" style="width:100%; margin-bottom:10px;">
