@@ -22,13 +22,31 @@ use App\Models\Sections;
 
 class ExamController extends Controller
 {
+    // public function start_test()
+    // {
+    //     $auth_id = auth()->user()->id;
+    //     $student_details = StudentDetails::with('user')->where('user_id', $auth_id)->first();
+
+    //     // $regi
+    //     return view('student.start-test', compact('student_details'));
+    // }
     public function start_test()
     {
         $auth_id = auth()->user()->id;
         $student_details = StudentDetails::with('user')->where('user_id', $auth_id)->first();
 
-        // $regi
-        return view('student.start-test', compact('student_details'));
+        $eligible = false;
+
+        if ($student_details) {
+
+            $registeredAt = $student_details->user->created_at;
+
+            if ($registeredAt) {
+                $eligible = $registeredAt->addHours(24)->lte(now());
+            }
+        }
+
+        return view('student.start-test', compact('student_details', 'eligible'));
     }
     public function career_test()
     {
@@ -159,6 +177,7 @@ class ExamController extends Controller
     // }
     public function career_test_submit(Request $request)
     {
+        return $request->all();
         $studentId = auth()->user()->id;
 
         $mapping = [
