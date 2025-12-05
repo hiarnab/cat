@@ -1,11 +1,6 @@
 @extends('layout.student.app')
 
 @section('title', 'Career Assessment Test')
-
-
-
-
-
 @push('styles')
     <style>
         .exam-box {

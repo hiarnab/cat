@@ -19,6 +19,7 @@ use App\Models\StudentDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\Sections;
+use App\Models\AnswerOption;
 
 class ExamController extends Controller
 {
@@ -43,10 +44,11 @@ class ExamController extends Controller
 
             if ($registeredAt) {
                 $eligible = $registeredAt->addHours(24)->lte(now());
+                // $eligible = true;
             }
         }
 
-        return view('student.start-test', compact('student_details', 'eligible'));
+        return view('student.start-test', compact('student_details' , 'eligible'));
     }
     public function career_test()
     {
@@ -57,13 +59,12 @@ class ExamController extends Controller
         if (!$student || $student->created_at->diffInHours(now()) < 24) {
             return redirect()->back()->with('error', 'You can start the test only after 24 hours of registration.');
         }
-        return view('student.cat-exam');
+        // return view('student.cat-exam');
 
         $sections = Sections::with([
             'subSections.questions.options',
             'questions.options'
         ])->get();
-        // return $sections;
 
         $questions = [];
 
@@ -77,7 +78,12 @@ class ExamController extends Controller
                 $questions[$sectionTitle][] = [
                     'q' => $q->question,
                     'type' => $q->type,
-                    'options' => $q->options->pluck('option_value')->toArray(),
+                    'options' => $q->options->map(function ($opt) {
+                        return [
+                            'id'    => $opt->id,
+                            'value' => $opt->option_value,
+                        ];
+                    })->toArray(),
                 ];
             }
 
@@ -93,11 +99,17 @@ class ExamController extends Controller
                     $questions[$sectionTitle][] = [
                         'q' => $q->question,
                         'type' => $q->type,
-                        'options' => $q->options->pluck('option_value')->toArray(),
+                        'options' => $q->options->map(function ($opt) {
+                            return [
+                                'id'    => $opt->id,
+                                'value' => $opt->option_value,
+                            ];
+                        })->toArray(),
                     ];
                 }
             }
         }
+
         // return $questions;
         // ✅ ONLY RETURN THE VIEW
         return view('student.cat-exam', compact('questions'));
@@ -175,22 +187,63 @@ class ExamController extends Controller
 
     //     return redirect()->back()->with('success', 'Your test has been submitted successfully!');
     // }
+    // public function career_test_submit(Request $request)
+    // {
+    //     return $request->all();
+    //     $studentId = auth()->user()->id;
+
+    //     $mapping = [
+    //         ['start' => 1, 'end' => 5, 'table' => 'MathematicsAptitude', 'section' => 1, 'sub' => null],
+    //         ['start' => 6, 'end' => 8, 'table' => 'PhysicsInterest', 'section' => 2, 'sub' => 1],
+    //         ['start' => 9, 'end' => 10, 'table' => 'ChemistryInterest', 'section' => 2, 'sub' => 2],
+    //         ['start' => 11, 'end' => 13, 'table' => 'BiologyInterest', 'section' => 2, 'sub' => 3],
+    //         ['start' => 14, 'end' => 16, 'table' => 'LanguagesAptitude', 'section' => 3, 'sub' => null],
+    //         ['start' => 17, 'end' => 19, 'table' => 'CommereceAptitude', 'section' => 4, 'sub' => null],
+    //         ['start' => 20, 'end' => 22, 'table' => 'SocialScienceAptitude', 'section' => 5, 'sub' => null],
+    //         ['start' => 23, 'end' => 25, 'table' => 'CareerInterests',    'section' => 6, 'sub' => null],
+    //         ['start' => 26, 'end' => 28, 'table' => 'LearningStyle',      'section' => 7, 'sub' => null],
+    //         ['start' => 29, 'end' => 32, 'table' => 'SelfReflection',     'section' => 8, 'sub' => null],
+    //     ];
+
+    //     foreach ($request->all() as $questionId => $answer) {
+
+    //         if (!is_numeric($questionId)) continue;
+    //         if ($answer === null || $answer === "") continue;
+
+    //         foreach ($mapping as $map) {
+
+    //             if ($questionId >= $map['start'] && $questionId <= $map['end']) {
+
+    //                 $model = "App\\Models\\" . $map['table'];
+
+    //                 $model::create([
+    //                     'user_id'        => $studentId,
+    //                     'section_id'     => $map['section'],
+    //                     'sub_section_id' => $map['sub'],
+    //                     'question_id'    => $questionId,
+    //                     'answer_option'  => is_array($answer) ? json_encode($answer) : $answer,
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     return redirect()->back()->with('success', 'Your test has been submitted successfully!');
+    // }
     public function career_test_submit(Request $request)
     {
-        return $request->all();
         $studentId = auth()->user()->id;
 
         $mapping = [
-            ['start' => 1, 'end' => 5, 'table' => 'MathematicsAptitude', 'section' => 1, 'sub' => null],
-            ['start' => 6, 'end' => 8, 'table' => 'PhysicsInterest', 'section' => 2, 'sub' => 1],
-            ['start' => 9, 'end' => 10, 'table' => 'ChemistryInterest', 'section' => 2, 'sub' => 2],
-            ['start' => 11, 'end' => 13, 'table' => 'BiologyInterest', 'section' => 2, 'sub' => 3],
-            ['start' => 14, 'end' => 16, 'table' => 'LanguagesAptitude', 'section' => 3, 'sub' => null],
-            ['start' => 17, 'end' => 19, 'table' => 'CommereceAptitude', 'section' => 4, 'sub' => null],
+            ['start' => 1,  'end' => 5,  'table' => 'MathematicsAptitude', 'section' => 1, 'sub' => null],
+            ['start' => 6,  'end' => 8,  'table' => 'PhysicsInterest',     'section' => 2, 'sub' => 1],
+            ['start' => 9,  'end' => 10, 'table' => 'ChemistryInterest',   'section' => 2, 'sub' => 2],
+            ['start' => 11, 'end' => 13, 'table' => 'BiologyInterest',     'section' => 2, 'sub' => 3],
+            ['start' => 14, 'end' => 16, 'table' => 'LanguagesAptitude',   'section' => 3, 'sub' => null],
+            ['start' => 17, 'end' => 19, 'table' => 'CommereceAptitude',   'section' => 4, 'sub' => null],
             ['start' => 20, 'end' => 22, 'table' => 'SocialScienceAptitude', 'section' => 5, 'sub' => null],
-            ['start' => 23, 'end' => 25, 'table' => 'CareerInterests',    'section' => 6, 'sub' => null],
-            ['start' => 26, 'end' => 28, 'table' => 'LearningStyle',      'section' => 7, 'sub' => null],
-            ['start' => 29, 'end' => 32, 'table' => 'SelfReflection',     'section' => 8, 'sub' => null],
+            ['start' => 23, 'end' => 25, 'table' => 'CareerInterests',     'section' => 6, 'sub' => null],
+            ['start' => 26, 'end' => 28, 'table' => 'LearningStyle',       'section' => 7, 'sub' => null],
+            ['start' => 29, 'end' => 32, 'table' => 'SelfReflection',      'section' => 8, 'sub' => null],
         ];
 
         foreach ($request->all() as $questionId => $answer) {
@@ -204,17 +257,60 @@ class ExamController extends Controller
 
                     $model = "App\\Models\\" . $map['table'];
 
-                    $model::create([
-                        'user_id'        => $studentId,
-                        'section_id'     => $map['section'],
-                        'sub_section_id' => $map['sub'],
-                        'question_id'    => $questionId,
-                        'answer_option'  => is_array($answer) ? json_encode($answer) : $answer,
-                    ]);
+                    // ✅ ✅ MCQ — REQUEST VALUE IS answer_options.id
+                    if (is_numeric($answer)) {
+                        // return $answer;
+
+                        $answerOption = AnswerOption::where('id', $answer)->first();
+                        // return $answerOption->id;
+
+                        if (!$answerOption) continue;
+
+                        $model::create([
+                            'user_id'        => $studentId,
+                            'section_id'     => $map['section'],
+                            'sub_section_id' => $map['sub'],
+                            'question_id'    => $questionId,
+                            'answer_id'     => $answerOption->id,
+                            'answer_option' => $answerOption->option, // a/b/c/d
+                        ]);
+                    }
+
+                    // ✅ ✅ TEXTAREA3
+                    elseif (is_array($answer)) {
+
+                        $cleaned = array_values(array_filter($answer, function ($v) {
+                            return trim($v) !== "";
+                        }));
+
+                        if (empty($cleaned)) continue;
+
+                        $model::create([
+                            'user_id'        => $studentId,
+                            'section_id'     => $map['section'],
+                            'sub_section_id' => $map['sub'],
+                            'question_id'    => $questionId,
+                            'answer_id'      => null,
+                            'answer_option'  => json_encode($cleaned),
+                        ]);
+                    }
+
+                    // ✅ ✅ SINGLE TEXTAREA
+                    else {
+
+                        $model::create([
+                            'user_id'        => $studentId,
+                            'section_id'     => $map['section'],
+                            'sub_section_id' => $map['sub'],
+                            'question_id'    => $questionId,
+                            'answer_id'      => null,
+                            'answer_option'  => trim($answer),
+                        ]);
+                    }
                 }
             }
         }
 
-        return redirect()->back()->with('success', 'Your test has been submitted successfully!');
+        return redirect()->back()->with('success', '✅ Test submitted successfully!');
     }
 }

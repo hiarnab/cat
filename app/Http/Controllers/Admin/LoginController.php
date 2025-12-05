@@ -118,9 +118,14 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        $roleId = Auth::user()->role_id;
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        if ($roleId === 1) {
         return redirect()->route('login.view');
+        } else {
+            return redirect()->route('student.login');
+        }
     }
 }
