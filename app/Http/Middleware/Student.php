@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Response;
 
-class Admin
+class Student
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role_id === 1) {
+        if (auth()->check() && auth()->user()->role_id === 2) {
             return $next($request);
         } else {
             return Redirect()->route('login.view');
