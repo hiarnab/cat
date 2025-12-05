@@ -17,8 +17,8 @@ use App\Models\StudentDetails;
 // use App\Models\SelfReflection;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\Sections;
-
 
 class ExamController extends Controller
 {
@@ -32,6 +32,15 @@ class ExamController extends Controller
     }
     public function career_test()
     {
+        $auth_id = auth()->user()->id;
+
+        $student = StudentDetails::where('user_id', $auth_id)->first();
+
+        if (!$student || $student->created_at->diffInHours(now()) < 24) {
+            return redirect()->back()->with('error', 'You can start the test only after 24 hours of registration.');
+        }
+        return view('student.cat-exam');
+
         $sections = Sections::with([
             'subSections.questions.options',
             'questions.options'
