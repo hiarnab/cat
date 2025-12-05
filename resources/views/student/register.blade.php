@@ -34,6 +34,16 @@
 
 <body class="d-flex flex-column">
     <script src="{{ asset('assets/js/demo-theme.min.js') }}"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                title: "Success!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        </script>
+    @endif
 
     <div class="page page-center">
         <div class="container py-4">
@@ -131,6 +141,7 @@
     <!-- Tabler JS -->
     <script src="{{ asset('assets/js/tabler.min.js') }}" defer></script>
     <script src="{{ asset('assets/js/demo.min.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 

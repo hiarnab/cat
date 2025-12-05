@@ -55,7 +55,7 @@ class LoginController extends Controller
 
         Mail::to($data['email'])->send(new StudentRegistrationMail($data['name'], $data['email'], $plainPassword,$url));
 
-        return Redirect()->back();
+        return Redirect()->back()->with('success', 'You have successfully registered. Please check your email for login link.');
     }
 
     public function login_view()
