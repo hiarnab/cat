@@ -78,11 +78,11 @@
                                 <label class="form-label">Future Stream Choosing</label>
                                 <select name="future_stream" class="form-select" required>
                                     <option value="">-- Select Stream --</option>
-                                    <option value="Science">Science</option>
+                                    <option value="Science(PCM)">Science (PCM)</option>
+                                    <option value="Science (PCB)">Science (PCB)</option>
                                     <option value="Commerce">Commerce</option>
-                                    <option value="Arts">Arts</option>
-                                    <option value="Vocational">Vocational</option>
-                                    <option value="Others">Others</option>
+                                    <option value="Humanities/Arts">Humanities/Arts</option>
+                                    <option value="Undecided / Need Guidance">Undecided / Need Guidance</option>
                                 </select>
                             </div>
 
@@ -118,7 +118,6 @@
                             </div>
 
                         </div>
-
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary w-100">Register</button>
                         </div>

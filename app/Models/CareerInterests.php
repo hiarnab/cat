@@ -9,10 +9,10 @@ class CareerInterests extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
+       'user_id',
         'section_id',
-        'question_23',
-        'question_24',
-        'question_25',
+       
+        'question_id',
+        'answer_option',
     ];
 }

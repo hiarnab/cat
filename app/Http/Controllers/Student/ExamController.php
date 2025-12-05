@@ -5,16 +5,17 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 
 use App\Models\StudentDetails;
-use App\Models\MathematicsAptitude;
-use App\Models\PhysicsInterest;
-use App\Models\ChemistryInterest;
-use App\Models\BiologyInterest;
-use App\Models\LanguagesAptitude;
-use App\Models\CommereceAptitude;
-use App\Models\SocialScienceAptitude;
-use App\Models\CareerInterests;
-use App\Models\LearningStyle;
-use App\Models\SelfReflection;
+// use App\Models\MathematicsAptitude;
+// use App\Models\PhysicsInterest;
+// use App\Models\ChemistryInterest;
+// use App\Models\BiologyInterest;
+// use App\Models\LanguagesAptitude;
+// use App\Models\CommereceAptitude;
+// use App\Models\SocialScienceAptitude;
+// use App\Models\CareerInterests;
+// use App\Models\LearningStyle;
+// use App\Models\SelfReflection;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\Sections;
@@ -26,18 +27,8 @@ class ExamController extends Controller
         $auth_id = auth()->user()->id;
         $student_details = StudentDetails::with('user')->where('user_id', $auth_id)->first();
 
-        $eligible = false;
-
-        if ($student_details) {
-
-            $registeredAt = $student_details->user->created_at;
-
-            if ($registeredAt) {   
-                $eligible = $registeredAt->addHours(24)->lte(now());
-            }
-        }
-
-        return view('student.start-test', compact('student_details', 'eligible'));
+        // $regi
+        return view('student.start-test', compact('student_details'));
     }
     public function career_test()
     {
@@ -93,108 +84,118 @@ class ExamController extends Controller
         // ✅ ONLY RETURN THE VIEW
         return view('student.cat-exam', compact('questions'));
     }
+    // public function career_test_submit(Request $request)
+    // {
+
+
+    //     $studentId = auth()->user()->id;
+    //     // return $studentId;
+    //     return $request->all();
+    //     $mathAptitude = new MathematicsAptitude(); 
+    //     $mathAptitude->user_id = $studentId;
+    //     $mathAptitude->section_id = 1;
+    //     $mathAptitude->quetion_id = 1;
+    //     // $mathAptitude->answer_option = $request->1;
+
+    // }
+    // public function career_test_submit(Request $request)
+    // {
+    //     $studentId = auth()->user()->id;
+    //     return $request->all();
+
+    //     // MAPPING OF QUESTION RANGES → TABLE + SECTION + SUB-SECTION
+    //     $mapping = [
+    //         // Mathematics Aptitude (Q1–5)
+    //         ['start' => 1, 'end' => 5, 'table' => 'MathematicsAptitude', 'section' => 1, 'sub' => null],
+
+    //         // Physics Interest (Q6–8)
+    //         ['start' => 6, 'end' => 8, 'table' => 'PhysicsInterest', 'section' => 2, 'sub' => 1],
+
+    //         // Chemistry Interest (Q9–10)
+    //         ['start' => 9, 'end' => 10, 'table' => 'ChemistryInterest', 'section' => 2, 'sub' => 2],
+
+    //         // Biology Interest (Q11–13)
+    //         ['start' => 11, 'end' => 13, 'table' => 'BiologyInterest', 'section' => 2, 'sub' => 3],
+    //         // Languages Aptitude (Q14–16)
+    //         ['start' => 14, 'end' => 16, 'table' => 'LanguagesAptitude', 'section' => 3, 'sub' => null],
+    //         // Commerce Aptitude (Q17–19)
+    //         ['start' => 17, 'end' => 19, 'table' => 'CommereceAptitude', 'section' => 4, 'sub' => null],
+    //         // Social Sciences Aptitude (Q20–22)
+    //         ['start' => 20, 'end' => 22, 'table' => 'SocialScienceAptitude', 'section' => 5, 'sub' => null],
+    //         // Career Interests (Q23–25)
+    //         ['start' => 23, 'end' => 25, 'table' => 'CareerInterests', 'section' => 6, 'sub' => null],
+    //         // Learning Style (Q26–28)
+    //         ['start' => 26, 'end' => 28, 'table' => 'LearningStyle', 'section' => 7, 'sub' => null],
+    //         // Self-Reflection (Q29–32)
+    //         ['start' => 29, 'end' => 32, 'table' => 'SelfReflection', 'section' => 8, 'sub' => null],
+    //     ];
+
+    //     // LOOP THROUGH ALL FORM INPUT
+    //     foreach ($request->all() as $questionId => $answer) {
+
+    //         if (!is_numeric($questionId)) continue;      // Skip hidden fields
+    //         if ($answer === null || $answer === "") continue; // Skip empty answers
+
+    //         foreach ($mapping as $map) {
+
+    //             // CHECK WHICH RANGE THE QUESTION BELONGS TO
+    //             if ($questionId >= $map['start'] && $questionId <= $map['end']) {
+
+    //                 $model = "App\\Models\\" . $map['table'];
+
+    //                 // SAVE ANSWER
+    //                 $model::create([
+    //                     'user_id'       => $studentId,
+    //                     'section_id'    => $map['section'],
+    //                     'sub_section_id' => $map['sub'],
+    //                     'question_id'   => $questionId,
+    //                     'answer_option' => is_array($answer) ? json_encode($answer) : $answer,
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     return redirect()->back()->with('success', 'Your test has been submitted successfully!');
+    // }
     public function career_test_submit(Request $request)
     {
-
-
         $studentId = auth()->user()->id;
-        // return $studentId;
-        // return $request->all();
-        $mathAptitude = new MathematicsAptitude(); 
-        $mathAptitude->user_id = $studentId;
-        $mathAptitude->section_id = 1;
-        $mathAptitude->question_01 = $request->q1;
-        $mathAptitude->question_02 = $request->q2;
-        $mathAptitude->question_03 = $request->q3;
-        $mathAptitude->question_04 = $request->q4;
-        $mathAptitude->question_05 = $request->q5;
-        $mathAptitude->save();
-        if($mathAptitude->save()){
-            $physicsInterest = new PhysicsInterest(); 
-            $physicsInterest->user_id = $studentId;
-            $physicsInterest->section_id = 2;
-            $physicsInterest->sub_section_id = 1;
-            $physicsInterest->question_06 = $request->q6;
-            $physicsInterest->question_07 = $request->q7;
-            $physicsInterest->question_08 = $request->q8;
-            $physicsInterest->save();
-            if($physicsInterest->save()){
-                $chemistryInterest = new ChemistryInterest(); 
-                $chemistryInterest->user_id = $studentId;
-                $chemistryInterest->section_id = 2;
-                $chemistryInterest->sub_section_id = 2;
-                $chemistryInterest->question_09 = $request->q9;
-                $chemistryInterest->question_10 = $request->q10;
-                $chemistryInterest->save();
-                if($chemistryInterest->save()){
-                    $biologyInterest = new BiologyInterest(); 
-                    $biologyInterest->user_id = $studentId;
-                    $biologyInterest->section_id = 2;
-                    $biologyInterest->sub_section_id = 3;
-                    $biologyInterest->question_11 = $request->q11;
-                    $biologyInterest->question_12 = $request->q12;
-                    $biologyInterest->question_13 = $request->q13;
-                    $biologyInterest->save();
-                    if($biologyInterest->save()){
-                        $languagesAptitude = new LanguagesAptitude(); 
-                        $languagesAptitude->user_id = $studentId;
-                        $languagesAptitude->section_id = 3;
-                        $languagesAptitude->question_14 = $request->q14;
-                        $languagesAptitude->question_15 = $request->q15;
-                        $languagesAptitude->question_16 = $request->q16;
-                        $languagesAptitude->save();
-                        if($languagesAptitude->save()){
-                            $commerceAptitude = new CommereceAptitude(); 
-                            $commerceAptitude->user_id = $studentId;
-                            $commerceAptitude->section_id = 4;
-                            $commerceAptitude->question_17 = $request->q17;
-                            $commerceAptitude->question_18 = $request->q18;
-                            $commerceAptitude->question_19 = $request->q19;
-                            $commerceAptitude->save();
-                            if($commerceAptitude->save()){
-                                $socialScienceAptitude = new SocialScienceAptitude(); 
-                                $socialScienceAptitude->user_id = $studentId;
-                                $socialScienceAptitude->section_id = 5;
-                                $socialScienceAptitude->question_20 = $request->q20;
-                                $socialScienceAptitude->question_21 = $request->q21;
-                                $socialScienceAptitude->question_22 = $request->q22;
-                                $socialScienceAptitude->save();
-                                if($socialScienceAptitude->save()){
-                                    $careerInterests = new CareerInterests(); 
-                                    $careerInterests->user_id = $studentId;
-                                    $careerInterests->section_id = 6;
-                                    $careerInterests->question_23 = json_encode($request->q23);
-                                    $careerInterests->question_24 = $request->q24;
-                                    $careerInterests->question_25 = $request->q25;
-                                    $careerInterests->save();
-                                    if($careerInterests->save()){
-                                        $learningStyle = new LearningStyle(); 
-                                        $learningStyle->user_id = $studentId;
-                                        $learningStyle->section_id = 7;
-                                        $learningStyle->question_26 = $request->q26;
-                                        $learningStyle->question_27 = $request->q27;
-                                        $learningStyle->question_28 = $request->q28;
-                                        $learningStyle->save();
-                                        if($learningStyle->save()){
-                                            $selfReflection = new SelfReflection(); 
-                                            $selfReflection->user_id = $studentId;
-                                            $selfReflection->section_id = 8;
-                                            $selfReflection->question_29 = $request->q29;
-                                            $selfReflection->question_30 = $request->q30;
-                                            $selfReflection->question_31 = json_encode($request->q31);
-                                            $selfReflection->question_32 = $request->q32;
-                                            $selfReflection->save();
-                                            if($selfReflection->save()){
-                                               return redirect()->back()->with('success', 'Your test has been submitted successfully!');
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+
+        $mapping = [
+            ['start' => 1, 'end' => 5, 'table' => 'MathematicsAptitude', 'section' => 1, 'sub' => null],
+            ['start' => 6, 'end' => 8, 'table' => 'PhysicsInterest', 'section' => 2, 'sub' => 1],
+            ['start' => 9, 'end' => 10, 'table' => 'ChemistryInterest', 'section' => 2, 'sub' => 2],
+            ['start' => 11, 'end' => 13, 'table' => 'BiologyInterest', 'section' => 2, 'sub' => 3],
+            ['start' => 14, 'end' => 16, 'table' => 'LanguagesAptitude', 'section' => 3, 'sub' => null],
+            ['start' => 17, 'end' => 19, 'table' => 'CommereceAptitude', 'section' => 4, 'sub' => null],
+            ['start' => 20, 'end' => 22, 'table' => 'SocialScienceAptitude', 'section' => 5, 'sub' => null],
+            ['start' => 23, 'end' => 25, 'table' => 'CareerInterests',    'section' => 6, 'sub' => null],
+            ['start' => 26, 'end' => 28, 'table' => 'LearningStyle',      'section' => 7, 'sub' => null],
+            ['start' => 29, 'end' => 32, 'table' => 'SelfReflection',     'section' => 8, 'sub' => null],
+        ];
+
+        foreach ($request->all() as $questionId => $answer) {
+
+            if (!is_numeric($questionId)) continue;
+            if ($answer === null || $answer === "") continue;
+
+            foreach ($mapping as $map) {
+
+                if ($questionId >= $map['start'] && $questionId <= $map['end']) {
+
+                    $model = "App\\Models\\" . $map['table'];
+
+                    $model::create([
+                        'user_id'        => $studentId,
+                        'section_id'     => $map['section'],
+                        'sub_section_id' => $map['sub'],
+                        'question_id'    => $questionId,
+                        'answer_option'  => is_array($answer) ? json_encode($answer) : $answer,
+                    ]);
                 }
             }
         }
+
+        return redirect()->back()->with('success', 'Your test has been submitted successfully!');
     }
 }

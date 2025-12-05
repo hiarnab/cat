@@ -11,8 +11,8 @@ class CommereceAptitude extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-        'question_17',
-        'question_18',
-        'question_19',
+     
+        'question_id',
+        'answer_option',
     ];
 }

@@ -12,8 +12,7 @@ class PhysicsInterest extends Model
         'user_id',
         'section_id',
         'sub_section_id',
-        'question_06',
-        'question_07',
-        'question_08',
+        'question_id',
+        'answer_option',
     ];
 }

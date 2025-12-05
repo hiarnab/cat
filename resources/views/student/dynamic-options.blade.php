@@ -1,6 +1,6 @@
 @php
 $type = $item['type'];
-$name = "q".$index;
+$name = $index;
 @endphp
 
 @if($type == "mcq")

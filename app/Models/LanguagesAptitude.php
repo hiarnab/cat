@@ -11,8 +11,8 @@ class LanguagesAptitude extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-        'question_14',
-        'question_15',
-        'question_16',
+       
+        'question_id',
+        'answer_option',
     ];
 }
