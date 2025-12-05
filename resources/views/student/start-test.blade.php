@@ -109,9 +109,14 @@
             <span>Email ID:</span>
             <span>{{ $student_details->user->email }}</span>
         </div>
+        {{-- <a href="{{ route('career.test') }}">
+            <button class="start-btn">
+                ✅ Start Test
+            </button>
+        </a> --}}
 
         @if ($eligible)
-            <a href="{{ url('/career-test') }}">
+            <a href="{{ route('career.test') }}">
                 <button class="start-btn">
                     ✅ Start Test
                 </button>

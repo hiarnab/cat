@@ -14,5 +14,6 @@ class ChemistryInterest extends Model
         'sub_section_id',
         'question_id',
         'answer_option',
+          'answer_id',
     ];
 }
