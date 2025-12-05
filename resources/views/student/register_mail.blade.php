@@ -94,11 +94,12 @@
                 <ul>
                     <li><strong>Email:</strong> {{ $email }}</li>
                     <li><strong>Password:</strong> {{ $password }}</li>
-                    <li><strong>Login Link:</strong> <a href="{{ $url }}" class="btn-login">Click to Login</a></li>
+                    
                 </ul>
             </div>
+            <p style="font-weight:800;">Please keep this information safe and secure. You must wait 24 hours after registration to start the test.</p>
+            <p><strong>Login Link:</strong> <a href="{{ $url }}" class="btn-login">Click to Login</a></p>
 
-            <p>Please keep this information safe and secure. You must wait 24 hours after registration to start the test.</p>
 
             {{-- <p>Regards,<br>
             CNC Online Exam Team</p> --}}
