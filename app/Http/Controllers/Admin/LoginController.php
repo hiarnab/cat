@@ -31,7 +31,7 @@ class LoginController extends Controller
         $data = $request->all();
 
         $plainPassword = Str::random(10);
-        $url = "student/login";
+        $url = "https://cat.careerandcourses.com/student/login";
         // return $plainPassword;
 
         $users =  User::create([
