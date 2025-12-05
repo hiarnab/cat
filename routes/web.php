@@ -41,8 +41,8 @@ Route::get('student/login',[LoginController::class,'student_login_view'])->name(
 Route::middleware('student')->group(function () {  
     Route::get('start-test', [ExamController::class, 'start_test'])->name('start.test');
     Route::get('career-test',[ExamController::class,'career_test'])->name('career.test');
+    Route::post('career-test/submit',[ExamController::class,'career_test_submit'])->name('career.test.submit');
 });
-
 
 Route::get('cat-eaxm', function () {
     return view('student.cat-exam');
@@ -55,3 +55,9 @@ Route::get('cat-eaxm', function () {
 //     });
 //     return 'Email sent';
 // });
+
+// Route::get('cat-eaxm', function () {
+//     return view('student.cat-exam');
+// });
+// student   
+
