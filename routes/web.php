@@ -24,6 +24,22 @@ Route::get('/', function () {
 Route::middleware('admin')->group(function () {
 
     Route::get('admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('admin/student-list', [DashboardController::class, 'student_list'])->name('admin.student-list');
+    // Search Page (GET)
+    Route::get('/admin/student-result-search', [DashboardController::class, 'studentResultSearch'])
+        ->name('admin.student.result.search');
+
+    // Result Page (GET)
+    Route::get('/admin/student-result/{id}', [DashboardController::class, 'studentResultPage'])
+        ->name('admin.student.result.page');
+    // Show search page
+    Route::get('students/search', [DashboardController::class, 'searchPage'])->name('students.search');
+
+    // Handle search result and redirect to recommendation page
+    Route::get('students/search/results', [DashboardController::class, 'searchResults'])->name('students.search.results');
+
+    // Show result & recommendation page
+    Route::get('student/{id}/result-recommendation', [DashboardController::class, 'resultRecommendation'])->name('student.result.recommendation');
 });
 
 Route::get('admin/login', [LoginController::class, 'login_view'])->name('login.view');
@@ -38,8 +54,8 @@ Route::post('student/register/submit', [LoginController::class, 'register'])->na
 
 Route::middleware('student')->group(function () {
     Route::get('start-test', [ExamController::class, 'start_test'])->name('start.test');
-    Route::get('career-test',[ExamController::class,'career_test'])->name('career.test');
-    Route::post('career-test/submit',[ExamController::class,'career_test_submit'])->name('career.test.submit');
+    Route::get('career-test', [ExamController::class, 'career_test'])->name('career.test');
+    Route::post('career-test/submit', [ExamController::class, 'career_test_submit'])->name('career.test.submit');
 });
 
 

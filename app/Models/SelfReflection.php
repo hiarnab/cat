@@ -11,9 +11,8 @@ class SelfReflection extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-        'question_29',
-        'question_30',
-        'question_31',
-        'question_32',
+        
+        'question_id',
+        'answer_option',
     ];
 }

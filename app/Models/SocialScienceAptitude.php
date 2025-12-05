@@ -11,8 +11,8 @@ class SocialScienceAptitude extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-        'question_20',
-        'question_21',
-        'question_22',
+        
+        'question_id',
+        'answer_option',
     ];
 }

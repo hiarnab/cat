@@ -12,8 +12,7 @@ class BiologyInterest extends Model
         'user_id',
         'section_id',
         'sub_section_id',
-        'question_11',
-        'question_12',
-        'question_13',
+        'question_id',
+        'answer_option',
     ];
 }

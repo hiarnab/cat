@@ -11,8 +11,8 @@ class LearningStyle extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-        'question_26',
-        'question_27',
-        'question_28',
+        
+        'question_id',
+        'answer_option',
     ];
 }

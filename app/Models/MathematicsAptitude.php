@@ -11,10 +11,10 @@ class MathematicsAptitude extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-        'question_01',
-        'question_02',
-        'question_03',
-        'question_04',
-        'question_05',
+        
+        'question_id',
+        'answer_option',
+
+        
     ];
 }
