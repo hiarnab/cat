@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
 use App\Models\Sections;
 use App\Models\AnswerOption;
 
+
 class ExamController extends Controller
 {
     // public function start_test()
@@ -31,25 +32,61 @@ class ExamController extends Controller
     //     // $regi
     //     return view('student.start-test', compact('student_details'));
     // }
+    // public function start_test()
+    // {
+    //     $auth_id = auth()->user()->id;
+    //     $student_details = StudentDetails::with('user')->where('user_id', $auth_id)->first();
+
+    //     $eligible = false;
+
+    //     if ($student_details) {
+
+    //         $registeredAt = $student_details->user->created_at;
+
+    //         if ($registeredAt) {
+    //             $eligible = $registeredAt->addHours(24)->lte(now());
+    //             // $eligible = true;
+    //         }
+    //     }
+    //     return $registeredAt;
+
+    //     return view('student.start-test', compact('student_details' , 'eligible'));
+    // }
+
+
     public function start_test()
     {
         $auth_id = auth()->user()->id;
         $student_details = StudentDetails::with('user')->where('user_id', $auth_id)->first();
 
         $eligible = false;
+        $remainingTime = "00:00:00"; // default
 
         if ($student_details) {
-
             $registeredAt = $student_details->user->created_at;
 
             if ($registeredAt) {
-                $eligible = $registeredAt->addHours(24)->lte(now());
-                // $eligible = true;
+                $availableAt = $registeredAt->addHours(24);
+                $now = now();
+
+                // Check if eligible
+                $eligible = $now->gte($availableAt);
+
+                // Remaining time in HH:MM:SS
+                if (!$eligible) {
+                    $diffInSeconds = $availableAt->diffInSeconds($now);
+                    $h = floor($diffInSeconds / 3600);
+                    $m = floor(($diffInSeconds % 3600) / 60);
+                    $s = $diffInSeconds % 60;
+                    $remainingTime = sprintf("%02d:%02d:%02d", $h, $m, $s);
+                }
             }
         }
 
-        return view('student.start-test', compact('student_details' , 'eligible'));
+        return view('student.start-test', compact('student_details', 'eligible', 'remainingTime'));
     }
+
+
     public function career_test()
     {
         $auth_id = auth()->user()->id;
