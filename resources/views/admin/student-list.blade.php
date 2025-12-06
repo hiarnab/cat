@@ -27,7 +27,7 @@
                                             <th>School Name</th>
                                             <th>Parent Contact</th>
                                             <th>Parent WhatsApp</th>
-                                            <th class="text-center">Action</th>
+                                            <th class="text-center" colspan="3">Action</th>
                                         </tr>
                                     </thead>
 
@@ -41,12 +41,27 @@
                                                 <td>{{ $student->guardian_mobile }}</td>
                                                 <td>{{ $student->guardian_whatsapp }}</td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-primary btn-sm"
+
+                                                    <!-- ✅ VIEW BUTTON -->
+                                                    <button class="btn btn-primary btn-sm mb-1"
                                                         onclick="viewStudent({{ json_encode($student) }})"
                                                         data-bs-toggle="modal" data-bs-target="#studentModal">
                                                         View
                                                     </button>
+
+                                                    <!-- ✅ ANSWER BUTTON -->
+                                                    <a href="{{ route('admin.student.result.page', $student->id) }}"
+                                                        class="btn btn-success btn-sm mb-1">
+                                                        Answer
+                                                    </a>
+
+                                                    <!-- ✅ REPORT & RECOMMENDATION BUTTON -->
+                                                    <a href="{{ route('student.result.recommendation', $student->id) }}" class="btn btn-warning btn-sm mb-1">
+                                                        Report & Recommendation
+                                                    </a>
+
                                                 </td>
+
                                             </tr>
                                         @empty
                                             <tr>
@@ -142,7 +157,7 @@
             document.getElementById('view_mobile').innerText = student.mobile ?? '-';
             document.getElementById('view_parent_mobile').innerText = student.guardian_mobile ?? '-';
             document.getElementById('view_parent_whatsapp').innerText = student.guardian_whatsapp ?? '-';
-            document.getElementById('view_email').innerText = student.email ?? '-';
+            document.getElementById('view_email').innerText = student.user.email?? '-';
             document.getElementById('view_address').innerText = student.address ?? '-';
         }
     </script>
