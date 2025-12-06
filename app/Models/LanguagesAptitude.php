@@ -11,8 +11,12 @@ class LanguagesAptitude extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-         'answer_id',
+        'answer_id',
         'question_id',
         'answer_option',
     ];
+    public function answerOption()
+    {
+        return $this->belongsTo(AnswerOption::class, 'answer_id');
+    }
 }

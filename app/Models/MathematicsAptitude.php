@@ -15,6 +15,10 @@ class MathematicsAptitude extends Model
         'question_id',
         'answer_option',
 
-        
+
     ];
+    public function answerOption()
+    {
+        return $this->belongsTo(AnswerOption::class, 'answer_id');
+    }
 }

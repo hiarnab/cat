@@ -17,7 +17,7 @@ class LoginSeeder extends Seeder
          User::create([
             'name'=> 'Admin',
             'email' => 'cnconlineexam@gmail.com',
-            'password'=> Hash::make('cnc700121'),
+            'password'=> Hash::make('cnc700121'),   
             'role_id'=> 1
         ]);
     }
