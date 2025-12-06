@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="sidebar-menu">
             <ul class="navbar-nav pt-lg-3">
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('admin.dashboard') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -31,7 +31,7 @@
                             Dashboard
                         </span>
                     </a>
-                </li>
+                </li> --}}
 
 
 
@@ -65,7 +65,7 @@
                         </span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('admin.student.result.search') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <!-- Tabler Icon: settings -->
@@ -91,9 +91,9 @@
                             Career Assessment
                         </span>
                     </a>
-                </li>
+                </li> --}}
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('students.search') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <!-- Tabler "User Circle" icon for Profile -->
@@ -110,7 +110,7 @@
                            Result & Recommendation
                         </span>
                     </a>
-                </li>
+                </li> --}}
 
 
 

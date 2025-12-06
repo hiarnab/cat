@@ -102,17 +102,19 @@ class DashboardController extends Controller
 
         // Student answers grouped by section (keys normalized to match section/sub-section names)
         $answers = [
-            'mathematics_aptitude'   => MathematicsAptitude::where('user_id', $userId)->get()->keyBy('question_id'),
-            'physics_interest'       => PhysicsInterest::where('user_id', $userId)->get()->keyBy('question_id'),
-            'chemistry_interest'     => ChemistryInterest::where('user_id', $userId)->get()->keyBy('question_id'),
-            'biology_interest'       => BiologyInterest::where('user_id', $userId)->get()->keyBy('question_id'),
-            'languages_aptitude'     => LanguagesAptitude::where('user_id', $userId)->get()->keyBy('question_id'),
-            'commerce_aptitude'      => CommereceAptitude::where('user_id', $userId)->get()->keyBy('question_id'),
-            'social_sciences_aptitude' => SocialScienceAptitude::where('user_id', $userId)->get()->keyBy('question_id'),
+            'mathematics_aptitude'   => MathematicsAptitude::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'physics_interest'       => PhysicsInterest::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'chemistry_interest'     => ChemistryInterest::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'biology_interest'       => BiologyInterest::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'languages_aptitude'     => LanguagesAptitude::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'commerce_aptitude'      => CommereceAptitude::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'social_sciences_aptitude' => SocialScienceAptitude::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
             'career_interests'       => CareerInterests::where('user_id', $userId)->get()->keyBy('question_id'),
-            'learning_style'         => LearningStyle::where('user_id', $userId)->get()->keyBy('question_id'),
+            'learning_style'         => LearningStyle::with('answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
             'self_reflection'        => SelfReflection::where('user_id', $userId)->get()->keyBy('question_id'),
+
         ];
+        // return $answers['self_reflection'];
 
         return view('admin.student-result-page', compact('student', 'sections', 'answers'));
     }
@@ -130,13 +132,25 @@ class DashboardController extends Controller
     {
         // return $request->all();
         $query = $request->input('query');
-
-        $students = StudentDetails::with('user')
-            ->whereHas('user', function ($q) use ($query) {
-                $q->where('name', 'like', "%{$query}%")
-                    ->orWhere('email', 'like', "%{$query}%");
-            })
-            ->get();
+        // return $query;
+        // Option 1: Extract email if format is "Name (email)"
+        if (preg_match('/\((.*?)\)/', $query, $matches)) {
+            $email = $matches[1];
+            $students = StudentDetails::with('user')
+                ->whereHas('user', function ($q) use ($email) {
+                    $q->where('email', $email);
+                })
+                ->get();
+        } else {
+            // Option 2: Fallback to search by name
+            $students = StudentDetails::with('user')
+                ->whereHas('user', function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%")
+                        ->orWhere('email', 'like', "%{$query}%");
+                })
+                ->get();
+        }
+        // return $students;
 
         return view('admin.students-search-results', compact('students', 'query'));
     }
@@ -194,22 +208,30 @@ class DashboardController extends Controller
     {
         $student = StudentDetails::with('user')->findOrFail($id);
         $userId = $student->user->id;
+        $sections = Sections::with(['subSections.questions', 'questions'])->get();
 
-        // ✅ Load answers per subject
+        // ✅ Filter only the final three sections
+        $finalSections = $sections->filter(function ($section) {
+            return in_array(strtolower($section->name), [
+                'career interests',
+                'learning style',
+                'self-reflection'
+            ]);
+        })->values(); // reset keys
+        // return $finalSections;
+
+
+        // ✅ Only additional sections for answers
         $answers = [
-            'mathematics'       => MathematicsAptitude::where('user_id', $userId)->get(),
-            'physics'           => PhysicsInterest::where('user_id', $userId)->get(),
-            'chemistry'         => ChemistryInterest::where('user_id', $userId)->get(),
-            'biology'           => BiologyInterest::where('user_id', $userId)->get(),
-            'languages'         => LanguagesAptitude::where('user_id', $userId)->get(),
-            'commerce'          => CommereceAptitude::where('user_id', $userId)->get(),
-            'social_sciences'   => SocialScienceAptitude::where('user_id', $userId)->get(),
+            'career_interests' => CareerInterests::with('question')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'learning_style'   => LearningStyle::with('question', 'answerOption')->where('user_id', $userId)->get()->keyBy('question_id'),
+            'self_reflection'  => SelfReflection::with('question')->where('user_id', $userId)->get()->keyBy('question_id'),
         ];
-
+        // return $answers['career_interests'];
         // ✅ Option → Points
         $pointsMap = ['A' => 4, 'B' => 3, 'C' => 2, 'D' => 1];
 
-        // ✅ Subject-wise FULL MARKS
+        // ✅ Subject-wise full marks (for scoring)
         $maxMarks = [
             'mathematics'     => 20,
             'physics'         => 12,
@@ -220,90 +242,61 @@ class DashboardController extends Controller
             'social_sciences' => 12,
         ];
 
-        // ✅ Calculate Raw Scores
+        // ✅ Load subject answers separately for scores
+        $subjectAnswers = [
+            'mathematics'       => MathematicsAptitude::with('answerOption')->where('user_id', $userId)->get(),
+            'physics'           => PhysicsInterest::with('answerOption')->where('user_id', $userId)->get(),
+            'chemistry'         => ChemistryInterest::with('answerOption')->where('user_id', $userId)->get(),
+            'biology'           => BiologyInterest::with('answerOption')->where('user_id', $userId)->get(),
+            'languages'         => LanguagesAptitude::with('answerOption')->where('user_id', $userId)->get(),
+            'commerce'          => CommereceAptitude::with('answerOption')->where('user_id', $userId)->get(),
+            'social_sciences'   => SocialScienceAptitude::with('answerOption')->where('user_id', $userId)->get(),
+        ];
+
+        // ✅ Calculate scores
         $scores = [];
-        foreach ($answers as $subject => $subjectAnswers) {
+        foreach ($subjectAnswers as $subject => $answersList) {
             $score = 0;
-            foreach ($subjectAnswers as $answer) {
-                $option = strtoupper($answer->answer_option);
+            foreach ($answersList as $answer) {
+                $option = strtoupper($answer->answer_option ?? '');
                 $score += $pointsMap[$option] ?? 0;
             }
             $scores[$subject] = $score;
         }
 
-        // ✅ Convert Scores → Percentage
+        // ✅ Convert scores to percentages
         $percentages = [];
         foreach ($scores as $subject => $score) {
             $percentages[$subject] = round(($score / $maxMarks[$subject]) * 100, 2);
         }
 
-        // ✅ ============================
-        // ✅ 100% FULL MARKS PRIORITY
-        // ✅ ============================
-
+        // ✅ Recommendation Logic
         $recommendation = '';
-
-        if (
-            $percentages['biology'] == 100 &&
-            $percentages['chemistry'] == 100
-        ) {
+        if (($percentages['biology'] ?? 0) == 100 && ($percentages['chemistry'] ?? 0) == 100) {
             $recommendation = 'Science Stream (PCB) – Medical, Healthcare & Life Sciences';
-        } elseif (
-            $percentages['mathematics'] == 100 &&
-            $percentages['physics'] == 100 &&
-            $percentages['chemistry'] == 100
-        ) {
+        } elseif (($percentages['mathematics'] ?? 0) == 100 && ($percentages['physics'] ?? 0) == 100 && ($percentages['chemistry'] ?? 0) == 100) {
             $recommendation = 'Science Stream (PCM) – Engineering, Technology & Research';
-        } elseif (
-            $percentages['mathematics'] == 100 &&
-            $percentages['commerce'] == 100
-        ) {
+        } elseif (($percentages['mathematics'] ?? 0) == 100 && ($percentages['commerce'] ?? 0) == 100) {
             $recommendation = 'Commerce Stream – Business, Finance & Entrepreneurship';
-        } elseif (
-            $percentages['languages'] == 100 &&
-            $percentages['social_sciences'] == 100
-        ) {
+        } elseif (($percentages['languages'] ?? 0) == 100 && ($percentages['social_sciences'] ?? 0) == 100) {
             $recommendation = 'Humanities & Arts – Literature, Law & Social Sciences';
         }
 
-        // ✅ ====================================
-        // ✅ NORMAL CONDITIONAL RECOMMENDATIONS
-        // ✅ ====================================
-
+        // ✅ Normal conditional recommendations
         $normalRecommendations = [];
-
-        // ✅ PCM RULE
-        if (
-            ($scores['mathematics'] ?? 0) >= 16 &&
-            (($scores['physics'] ?? 0) + ($scores['chemistry'] ?? 0)) >= 15
-        ) {
+        if (($scores['mathematics'] ?? 0) >= 16 && (($scores['physics'] ?? 0) + ($scores['chemistry'] ?? 0)) >= 15) {
             $normalRecommendations[] = 'Science Stream (PCM) – Engineering, Technology, Research';
         }
-
-        // ✅ PCB RULE
-        if (
-            ($scores['biology'] ?? 0) >= 9 &&
-            ($scores['chemistry'] ?? 0) >= 6
-        ) {
+        if (($scores['biology'] ?? 0) >= 9 && ($scores['chemistry'] ?? 0) >= 6) {
             $normalRecommendations[] = 'Science Stream (PCB) – Medical, Healthcare, Life Sciences';
         }
-
-        // ✅ COMMERCE RULE
-        if (
-            ($scores['mathematics'] ?? 0) >= 12 &&
-            ($scores['commerce'] ?? 0) >= 9
-        ) {
+        if (($scores['mathematics'] ?? 0) >= 12 && ($scores['commerce'] ?? 0) >= 9) {
             $normalRecommendations[] = 'Commerce Stream – Business, Finance, Entrepreneurship';
         }
-
-        // ✅ HUMANITIES RULE
-        if (
-            (($scores['languages'] ?? 0) + ($scores['social_sciences'] ?? 0)) >= 18
-        ) {
+        if ((($scores['languages'] ?? 0) + ($scores['social_sciences'] ?? 0)) >= 18) {
             $normalRecommendations[] = 'Humanities/Arts – Arts, Literature, Social Sciences';
         }
 
-        // ✅ FINAL RECOMMENDATION OUTPUT
         if (!$recommendation && !empty($normalRecommendations)) {
             $recommendation = $normalRecommendations[0];
             if (count($normalRecommendations) > 1) {
@@ -319,7 +312,9 @@ class DashboardController extends Controller
             'student',
             'scores',
             'percentages',
-            'recommendation'
+            'recommendation',
+            'finalSections',
+            'answers'  // ✅ Only additional sections
         ));
     }
 }
