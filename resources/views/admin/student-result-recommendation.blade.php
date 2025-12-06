@@ -77,10 +77,10 @@
                 <!-- CAREER GUIDANCE -->
                 <h4 class="text-primary">Career Guidance</h4>
                 <div class="bg-white border rounded p-3 shadow-sm mb-4">
-                    @if (str_contains($recommendation, 'Engineering'))
+                  @if(str_contains($recommendation, 'Medical'))
+                      MBBS, Nursing, Pharmacy, Biotechnology, Clinical Research.
+                    @elseif (str_contains($recommendation, 'Engineering'))
                         Engineering, AI, Robotics, Data Science, Architecture, Research.
-                    @elseif(str_contains($recommendation, 'Medical'))
-                        MBBS, Nursing, Pharmacy, Biotechnology, Clinical Research.
                     @elseif(str_contains($recommendation, 'Commerce'))
                         CA, CS, BBA, MBA, Accounting, Finance, Entrepreneurship.
                     @elseif(str_contains($recommendation, 'Humanities'))
