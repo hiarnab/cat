@@ -68,20 +68,20 @@ class LoginController extends Controller
         $request->validate([
             'email' => 'required',
             'password' => 'required'
-        ]);
+        ]); 
 
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials)) { 
             $request->session()->regenerate();
 
             $user = Auth::user();
 
-            if ($user->role_id === 1) {
+            if ($user->role_id === 1) {   
                 return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully');
-            } elseif ($user->role_id === 2) {
+            } elseif ($user->role_id === 2) {   
                 return redirect()->route('start.test')->with('success', 'Logged in Successfully');
-            }
+            }  
         } else {
             return redirect()->back();
         }
@@ -105,7 +105,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-
+ 
             if ($user->role_id === 1) {
                 return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully');
             } elseif ($user->role_id === 2) {
