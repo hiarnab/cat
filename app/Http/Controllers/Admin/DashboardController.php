@@ -284,11 +284,11 @@ class DashboardController extends Controller
 
         // ✅ Normal conditional recommendations
         $normalRecommendations = [];
-        if (($scores['mathematics'] ?? 0) >= 16 && (($scores['physics'] ?? 0) + ($scores['chemistry'] ?? 0)) >= 15) {
-            $normalRecommendations[] = 'Science Stream (PCM) – Engineering, Technology, Research';
-        }
         if (($scores['biology'] ?? 0) >= 9 && ($scores['chemistry'] ?? 0) >= 6) {
             $normalRecommendations[] = 'Science Stream (PCB) – Medical, Healthcare, Life Sciences';
+        }
+        if (($scores['mathematics'] ?? 0) >= 16 && (($scores['physics'] ?? 0) + ($scores['chemistry'] ?? 0)) >= 15) {
+            $normalRecommendations[] = 'Science Stream (PCM) – Engineering, Technology, Research';
         }
         if (($scores['mathematics'] ?? 0) >= 12 && ($scores['commerce'] ?? 0) >= 9) {
             $normalRecommendations[] = 'Commerce Stream – Business, Finance, Entrepreneurship';
