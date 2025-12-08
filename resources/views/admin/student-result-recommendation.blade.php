@@ -27,20 +27,44 @@
                     </div>
                     <div class="col-md-3">
                         <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block">Email</small>
+                            <strong>{{ $student->user->email ?? 'N/A' }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded">
                             <small class="text-muted d-block">School Name</small>
                             <strong>{{ $student->school_name ?? 'N/A' }}</strong>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="p-3 bg-light rounded">
-                            <small class="text-muted d-block">Test Date</small>
-                            <strong>{{ now()->format('d-m-Y') }}</strong>
+                            <small class="text-muted d-block">Current Class</small>
+                            <strong>{{ $student->current_class ?? 'N/A' }}</strong>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="p-3 bg-light rounded">
-                            <small class="text-muted d-block">Test Time</small>
-                            <strong>{{ now()->format('h:i A') }}</strong>
+                            <small class="text-muted d-block">Future Stream</small>
+                            <strong>{{ $student->future_stream ?? 'N/A' }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block">Mobile</small>
+                            <strong>{{ $student->mobile ?? 'N/A' }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block">Guardian Mobile</small>
+                            <strong>{{ $student->guardian_mobile ?? 'N/A' }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block">Guardian Whatsapp</small>
+                            <strong>{{ $student->guardian_whatsapp ?? 'N/A' }}</strong>
                         </div>
                     </div>
                 </div>
@@ -60,25 +84,77 @@
                         </div>
                     @endforeach
                 </div>
+                <div class="print-page page-break"></div>
 
                 <!-- STREAM RECOMMENDATION -->
-                <div class="bg-success bg-opacity-10 p-4 rounded mb-4 border-start border-4 border-success">
+
+                {{-- <div class="bg-success bg-opacity-10 p-4 rounded mb-4 border-start border-4 border-success">
                     <h4 class="fw-bold">
                         <i class="fas fa-bullseye"></i> Stream Recommendation
                     </h4>
                     <div class="bg-white p-3 rounded shadow-sm mt-2">
-                        <strong>{{ $recommendation }}</strong>
+                        <strong>{{ $recommendation ?? 'No recommendation available' }}</strong>
+        
                         <p class="mb-0 mt-2">
                             This stream is suggested based on your strongest subject performance.
                         </p>
                     </div>
+                </div> --}}
+                <div class="bg-success bg-opacity-10 p-4 rounded mb-4 border-start border-4 border-success">
+                    <h4 class="fw-bold">
+                        <i class="fas fa-bullseye"></i> Stream Recommendation
+                    </h4>
+
+                    @php
+                        $recommendation =
+                            'Science Stream (PCB) – Medical, Healthcare, Life Sciences | Other Suitable Streams: Science Stream (PCM) – Engineering, Technology, Research, Commerce Stream – Business, Finance, Entrepreneurship, Humanities/Arts – Arts, Literature, Social Sciences';
+                        // dd($recommendation);
+                        $rec = $recommendation ?? '';
+
+                        // Split by |  (Main | Other Streams)
+                        $parts = explode('|', $rec);
+                        $main = trim($parts[0] ?? '');
+
+                        // Process other suitable streams
+                        $othersRaw = trim($parts[1] ?? '');
+                        $othersRaw = str_replace('Other Suitable Streams:', '', $othersRaw);
+
+                        // Convert to array
+                        $otherStreams = array_filter(array_map('trim', explode(',', $othersRaw)));
+                    @endphp
+
+                    <div class="bg-white p-3 rounded shadow-sm mt-2">
+
+                        <!-- Main Recommended Stream -->
+                        <strong class="text-primary d-block mb-2">{{ $main }}</strong>
+
+                        <p class="mb-2 text-muted small">
+                            This stream is suggested based on your strongest subject performance.
+                        </p>
+
+                        <!-- Always show Other Suitable Streams -->
+                        @if (count($otherStreams) > 0)
+                            <h6 class="fw-bold mt-3">Other Suitable Streams</h6>
+
+                            @foreach ($otherStreams as $stream)
+                                <div class="d-flex align-items-center py-1">
+                                    <i class="fas fa-caret-right me-2 text-success"></i>
+                                    <span>{{ $stream }}</span>
+                                </div>
+                            @endforeach
+                        @endif
+
+                    </div>
                 </div>
+
+
+
 
                 <!-- CAREER GUIDANCE -->
                 <h4 class="text-primary">Career Guidance</h4>
                 <div class="bg-white border rounded p-3 shadow-sm mb-4">
-                  @if(str_contains($recommendation, 'Medical'))
-                      MBBS, Nursing, Pharmacy, Biotechnology, Clinical Research.
+                    @if (str_contains($recommendation, 'Medical'))
+                        MBBS, Nursing, Pharmacy, Biotechnology, Clinical Research.
                     @elseif (str_contains($recommendation, 'Engineering'))
                         Engineering, AI, Robotics, Data Science, Architecture, Research.
                     @elseif(str_contains($recommendation, 'Commerce'))
@@ -265,11 +341,12 @@
         @media print {
 
             @page {
-                margin: 0;
+                margin-top: 40px !important;
             }
 
             body {
                 margin: 20px !important;
+                  /* margin-top: 40px !important; */
                 padding: 0 !important;
                 font-size: 12pt;
                 -webkit-print-color-adjust: exact;
@@ -342,6 +419,32 @@
                 width: 100% !important;
                 padding: 0 !important;
                 margin: 0 !important;
+            }
+
+            /* ALWAYS WRAP LONG TEXT */
+            * {
+                white-space: normal !important;
+                word-break: break-word !important;
+            }
+
+            /* STUDENT DETAILS BOX FIX */
+            .student-info-box,
+            .p-3.bg-light.rounded {
+                overflow: visible !important;
+                white-space: normal !important;
+            }
+
+            /* TABLE TEXT SHOULD NOT BE HIDDEN */
+            table td,
+            table th {
+                white-space: normal !important;
+                word-break: break-word !important;
+                overflow: visible !important;
+            }
+
+            /* FORCE PAGE BREAK */
+            .page-break {
+                page-break-after: always !important;
             }
 
         }
