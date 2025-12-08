@@ -301,12 +301,14 @@ class DashboardController extends Controller
             $recommendation = $normalRecommendations[0];
             if (count($normalRecommendations) > 1) {
                 $recommendation .= ' | Other Suitable Streams: ' . implode(', ', array_slice($normalRecommendations, 1));
+                // $recommendation ='Science Stream (PCB) – Medical, Healthcare, Life Sciences | Other Suitable Streams: Science Stream (PCM) – Engineering, Technology, Research, Commerce Stream – Business, Finance, Entrepreneurship, Humanities/Arts – Arts, Literature, Social Sciences';
             }
         }
 
         if (!$recommendation) {
             $recommendation = 'No specific stream recommendation based on your performance.';
         }
+      
 
         return view('admin.student-result-recommendation', compact(
             'student',
