@@ -106,8 +106,8 @@
                     </h4>
 
                     @php
-                        $recommendation =
-                            'Science Stream (PCB) – Medical, Healthcare, Life Sciences | Other Suitable Streams: Science Stream (PCM) – Engineering, Technology, Research, Commerce Stream – Business, Finance, Entrepreneurship, Humanities/Arts – Arts, Literature, Social Sciences';
+                        // $recommendation =
+                        //     'Science Stream (PCB) – Medical, Healthcare, Life Sciences | Other Suitable Streams: Science Stream (PCM) – Engineering, Technology, Research, Commerce Stream – Business, Finance, Entrepreneurship, Humanities/Arts – Arts, Literature, Social Sciences';
                         // dd($recommendation);
                         $rec = $recommendation ?? '';
 
