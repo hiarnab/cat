@@ -34,7 +34,7 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-light rounded">
                             <small class="text-muted d-block">Email</small>
-                            <strong>{{ $student->user->email ?? 'N/A' }}</strong>
+                            <strong class="text-break">{{ $student->user->email ?? 'N/A' }}</strong>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -46,7 +46,15 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-light rounded">
                             <small class="text-muted d-block">Current Class</small>
-                            <strong vls>{{ $student->current_class ?? 'N/A' }}</strong>
+                            <strong>
+                                @if (!empty($student->current_class))
+                                    {{ Str::startsWith(strtolower($student->current_class), 'class')
+                                        ? $student->current_class
+                                        : 'Class ' . $student->current_class }}
+                                @else
+                                    N/A
+                                @endif
+                            </strong>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -404,7 +412,7 @@
         }
 
         @media print {
-            
+
             @page {
                 size: A4;
                 margin: 0;
