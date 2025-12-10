@@ -7,6 +7,12 @@
 
             <!-- PAGE 1: Subject Scores + Career Guidance -->
             <div class="print-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <img src="{{ asset('assets/image/BIG-SD-Logo-R.webp') }}" class="print-logo" alt="SD Logo">
+
+                    <img src="{{ asset('assets/image/CNC_LOGO-R.webp') }}" class="print-logo" alt="CNC Logo">
+                </div>
 
                 <!-- HEADER -->
                 <div class="card shadow-sm mb-4">
@@ -40,7 +46,7 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-light rounded">
                             <small class="text-muted d-block">Current Class</small>
-                            <strong>{{ $student->current_class ?? 'N/A' }}</strong>
+                            <strong vls>{{ $student->current_class ?? 'N/A' }}</strong>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -71,7 +77,7 @@
 
                 <!-- SUBJECT SCORES -->
                 <h4 class="text-primary mb-3">Subject-wise Scores</h4>
-                <div class="row g-3 mb-4">
+                <div class="row mb-4">
                     @foreach ($scores as $subject => $score)
                         <div class="col-md-3 col-sm-6">
                             <div class="border rounded p-3 text-center bg-light">
@@ -84,11 +90,29 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="print-page page-break"></div>
 
-                <!-- STREAM RECOMMENDATION -->
+                <div class="print-footer">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fs-4">Powered by</span>
+                            <img src="{{ asset('assets/image/BIG-SD-Logo-R.webp') }}" class="print-logo" alt="SD Logo">
+                            <span class="fs-4">in Association with</span>
+                            <img src="{{ asset('assets/image/CNC_LOGO-R.webp') }}" class="print-logo" alt="CNC Logo">
+                        </div>
 
-                {{-- <div class="bg-success bg-opacity-10 p-4 rounded mb-4 border-start border-4 border-success">
+                        {{-- <div>
+                            Page <span class="pageNumber"></span>
+                        </div> --}}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class=" page-break"></div>
+
+            <!-- STREAM RECOMMENDATION -->
+
+            {{-- <div class="bg-success bg-opacity-10 p-4 rounded mb-4 border-start border-4 border-success">
                     <h4 class="fw-bold">
                         <i class="fas fa-bullseye"></i> Stream Recommendation
                     </h4>
@@ -100,6 +124,7 @@
                         </p>
                     </div>
                 </div> --}}
+            <div class="print-page print-pad-top">
                 <div class="bg-success bg-opacity-10 p-4 rounded mb-4 border-start border-4 border-success">
                     <h4 class="fw-bold">
                         <i class="fas fa-bullseye"></i> Stream Recommendation
@@ -165,13 +190,28 @@
                         Career guidance will be provided after expert counseling.
                     @endif
                 </div>
+                <div class="print-footer">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fs-4">Powered by</span>
+                            <img src="{{ asset('assets/image/BIG-SD-Logo-R.webp') }}" class="print-logo" alt="SD Logo">
+                            <span class="fs-4">in Association with</span>
+                            <img src="{{ asset('assets/image/CNC_LOGO-R.webp') }}" class="print-logo" alt="CNC Logo">
+                        </div>
+
+                        {{-- <div>
+                            Page <span class="pageNumber"></span>
+                        </div> --}}
+                    </div>
+                </div>
+
             </div>
 
             <!-- PAGE BREAK -->
-            <div class="print-page page-break"></div>
+            <div class=" page-break"></div>
 
             <!-- PAGE 2: Student Answers -->
-            <div class="print-page">
+            <div class="print-page print-pad-top">
                 <h4 class="text-primary mb-3">Student Answers</h4>
 
                 @php
@@ -241,6 +281,21 @@
                         </div>
                     </div>
                 @endforeach
+                <div class="print-footer">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fs-4">Powered by</span>
+                            <img src="{{ asset('assets/image/BIG-SD-Logo-R.webp') }}" class="print-logo" alt="SD Logo">
+                            <span class="fs-4">in Association with</span>
+                            <img src="{{ asset('assets/image/CNC_LOGO-R.webp') }}" class="print-logo" alt="CNC Logo">
+                        </div>
+
+                        {{-- <div>
+                            Page <span class="pageNumber"></span>
+                        </div> --}}
+                    </div>
+                </div>
+
             </div>
 
             <!-- PRINT BUTTON -->
@@ -338,19 +393,77 @@
 @endpush --}}
 @push('css')
     <style>
-        @media print {
+        .print-footer {
+            display: none;
+        }
 
+        .print-logo {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        @media print {
+            
             @page {
-                margin-top: 40px !important;
+                size: A4;
+                margin: 0;
             }
 
             body {
                 margin: 20px !important;
-                  /* margin-top: 40px !important; */
+                /* ❗IMPORTANT: Must be 0 */
                 padding: 0 !important;
                 font-size: 12pt;
                 -webkit-print-color-adjust: exact;
                 background: #ffffff !important;
+                counter-reset: page;
+            }
+
+            .print-pad-top {
+                padding-top: 40px !important;
+
+            }
+
+            .print-page {
+                width: 210mm;
+                min-height: 297mm;
+                position: relative;
+                /* padding:8mm; */
+                box-sizing: border-box;
+                page-break-inside: avoid !important;
+            }
+
+            .print-content {
+                flex: 1;
+            }
+
+            /* ✅ PDF SAFE FOOTER */
+            .print-footer {
+                position: absolute;
+                bottom: 10mm;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                display: flex !important;
+                justify-content: center;
+                border-top: 1px solid #ccc;
+                padding-top: 6px;
+            }
+
+            .pageNumber::after {
+                counter-increment: page;
+                content: counter(page);
+            }
+
+            .print-logo {
+                height: 50px;
+                width: auto;
+                object-fit: contain;
+            }
+
+            .print-footer img {
+                vertical-align: middle;
             }
 
             /* ✅ Hide only print button */
@@ -381,10 +494,14 @@
                 display: block !important;
             }
 
+            .print-page {
+                display: flex;
+                flex-direction: column;
+            }
+
             /* ✅ Avoid page break inside sections */
             .card,
             .card-body,
-            .print-page,
             .section-block,
             table {
                 page-break-inside: avoid !important;
